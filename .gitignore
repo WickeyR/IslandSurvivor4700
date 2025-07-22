@@ -2,6 +2,18 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+
+
+# macOS Finder metadata
+.DS_Store
+
+# Nested Unity cache folders in Island Survivor
+/Island Survivor/Library/
+/Island Survivor/Temp/
+/Island Survivor/obj/
+/Island Survivor/Logs/
+/Island Survivor/UserSettings/
+
 .utmp/
 /[Ll]ibrary/
 /[Tt]emp/
