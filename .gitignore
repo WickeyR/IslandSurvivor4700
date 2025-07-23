@@ -183,6 +183,7 @@ Thumbs.db
 **/[Bb]uilds/
 **/[Ll]ogs/
 **/[Uu]ser[Ss]ettings/
+/Library/
 
 # MemoryCaptures can get excessive
 **/[Mm]emoryCaptures/
