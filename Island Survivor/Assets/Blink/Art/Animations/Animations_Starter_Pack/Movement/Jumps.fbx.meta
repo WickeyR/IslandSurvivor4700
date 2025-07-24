@@ -32,7 +32,10 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'Hip_L'
+      : position error = 2.099632 mm\n\t'Knee_L' : position error = 73.224243 mm\n\t'Ankle_L'
+      : position error = 38.952427 mm\n\t'Toes_L' : position error = 36.839256 mm\n"
     animationImportErrors: 
     animationImportWarnings: "\nClip 'human_male_jumpup' has import animation warnings
       that might lower retargeting quality:\nNote: Activate translation DOF on avatar
