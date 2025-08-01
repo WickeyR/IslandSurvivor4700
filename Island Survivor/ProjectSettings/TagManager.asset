@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - MainLight
+  - Tree
   layers:
   - Default
   - TransparentFX
