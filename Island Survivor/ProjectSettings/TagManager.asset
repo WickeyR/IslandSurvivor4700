@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainLight
   - Tree
+  - Drops
   layers:
   - Default
   - TransparentFX

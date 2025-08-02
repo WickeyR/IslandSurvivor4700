@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: -2704279294497376981}
   - component: {fileID: -1555107163749115379}
   - component: {fileID: 4265264706672132074}
+  - component: {fileID: -5803137302709502101}
+  - component: {fileID: 4513048714866672403}
   m_Layer: 0
   m_Name: fruitDrops
-  m_TagString: Untagged
+  m_TagString: Drops
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +64,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -130,6 +132,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-5803137302709502101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344131770260957005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb3be0b3438a4658a203aa5fc1a4506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemName: Fruit
+  playerInRange: 0
+--- !u!65 &4513048714866672403
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344131770260957005}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0.001484759, y: 0.06791788, z: 0.00970757}
 --- !u!1001 &1140406692135167131
 PrefabInstance:
   m_ObjectHideFlags: 0

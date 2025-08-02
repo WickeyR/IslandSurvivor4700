@@ -21,15 +21,18 @@ public class SelectionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit)){ //checks if the ray hit anything and stores information in hit if something was hit
             var selectionTransform = hit.transform; //grabs hit object
 
-            if (selectionTransform.GetComponent<InteractableObject>()){
+            if (selectionTransform.GetComponent<InteractableObject>() && selectionTransform.GetComponent<InteractableObject>()){
                 //grabs the item name to display
                 interaction_text.text = selectionTransform.GetComponent<InteractableObject>().GetItemName();
                 InteractionInfoUI.SetActive(true);
             }//end of if
-            else{
+            else{//hit but no script on item
                 InteractionInfoUI.SetActive(false); //shows nothing if object is not interactable
             }//end of else
         }//end of if
+        else{ //deactivate text if nothing is hit (i.e., sky)
+            InteractionInfoUI.SetActive(false);
+        }
 
         //for chopping down trees
         if (Input.GetMouseButtonDown(0)){ //use left click to chop (0-left, 1-right, 2-scroller)
