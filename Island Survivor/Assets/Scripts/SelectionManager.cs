@@ -21,7 +21,7 @@ public class SelectionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit)){ //checks if the ray hit anything and stores information in hit if something was hit
             var selectionTransform = hit.transform; //grabs hit object
 
-            if (selectionTransform.GetComponent<InteractableObject>() && selectionTransform.GetComponent<InteractableObject>()){
+            if (selectionTransform.GetComponent<InteractableObject>() && selectionTransform.GetComponent<InteractableObject>().playerInRange){
                 //grabs the item name to display
                 interaction_text.text = selectionTransform.GetComponent<InteractableObject>().GetItemName();
                 InteractionInfoUI.SetActive(true);

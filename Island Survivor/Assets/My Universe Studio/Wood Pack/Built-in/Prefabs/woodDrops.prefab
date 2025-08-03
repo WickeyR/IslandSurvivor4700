@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb3be0b3438a4658a203aa5fc1a4506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemName: Craftable Wood
+  ItemName: Craftable Wood (Drag me to your inventory)
   playerInRange: 0
 --- !u!65 &-3485724774787348269
 BoxCollider:

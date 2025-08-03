@@ -14,7 +14,7 @@ public class InteractableObject : MonoBehaviour
 
     //pick up the item with left click into inventory
     void Update(){
-        if (Input.GetKeyDown(KeyCode.Mouse0) && playerInRange){
+            if (Input.GetKeyDown(KeyCode.Mouse1) && playerInRange){ //right click to add inventory
             Debug.Log("Item added to inventory"); //delete later
             Destroy(gameObject); //disappear from view and is added to inventory
         }//end of if
