@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    public string ItemName;
+    public string itemName;
     public bool playerInRange;
 
     //displays object name
     public string GetItemName(){
-        return ItemName;
+        return itemName;
     }//end of GetItemName()
 
     //pick up the item with left click into inventory
     void Update(){
-            if (Input.GetKeyDown(KeyCode.Mouse1) && playerInRange){ //right click to add inventory
-            Debug.Log("Item added to inventory"); //delete later
-            Destroy(gameObject); //disappear from view and is added to inventory
-        }//end of if
+         if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange /*&& SelectionManager.Instance.onTarget*/){ //right click to add inventory
+            if (InventorySystem.Instance.checkFull()){ //check if inventory is full before adding item
+                InventorySystem.Instance.addToInventory(itemName); //add item name to inventory
+                Destroy(gameObject); //disappear from view and is added to inventory
+            }//end of if
+            else{
+                Debug.Log("Inventory is full");
+            }//end of else
+         }//end of if
     }//end of Update
 
     //check if player is in range of item

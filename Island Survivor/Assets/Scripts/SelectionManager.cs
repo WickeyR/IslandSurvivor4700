@@ -10,6 +10,8 @@ public class SelectionManager : MonoBehaviour
     Text interaction_text; //changing the text value directly in the Inspector
     public float choppingDistance = 3f;
 
+    public static object Instance { get; internal set; }
+
     private void Start(){
         interaction_text = InteractionInfoUI.GetComponent<Text>(); //assigned to internal text component
     }//end of start
