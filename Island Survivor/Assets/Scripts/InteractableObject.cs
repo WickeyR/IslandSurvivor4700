@@ -12,11 +12,12 @@ public class InteractableObject : MonoBehaviour
         return itemName;
     }//end of GetItemName()
 
-    //pick up the item with left click into inventory
+    //pick up the item with right click into inventory
     void Update(){
-         if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange /*&& SelectionManager.Instance.onTarget*/){ //right click to add inventory
-            if (InventorySystem.Instance.checkFull()){ //check if inventory is full before adding item
-                InventorySystem.Instance.addToInventory(itemName); //add item name to inventory
+         if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange){ //right click to add inventory
+            if (!InventorySystem.Instance.CheckFull()){ //check if inventory is full before adding item
+                InventorySystem.Instance.AddToInventory(itemName); //add item name to inventory
+                Debug.Log("works");
                 Destroy(gameObject); //disappear from view and is added to inventory
             }//end of if
             else{

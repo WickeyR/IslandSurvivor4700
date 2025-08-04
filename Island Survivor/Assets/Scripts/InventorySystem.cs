@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class InventorySystem : MonoBehaviour
 {
-    public static InventorySystem Instance { get; set; }
+    public static InventorySystem Instance { get; set; } //singleton
     public GameObject inventoryScreenUI; //reference to UI
     public bool isOpen; //check if inventory screen is open
     //public bool isFull; //check if inventory is full
@@ -23,7 +23,7 @@ public class InventorySystem : MonoBehaviour
         }//end of else
     }//end of Awake
 
-    void Start(){
+    private void Start(){
         isOpen = false;
         populateSlotList();
     }//end of Start
@@ -32,7 +32,7 @@ public class InventorySystem : MonoBehaviour
     private void populateSlotList(){
         //searching for transforms in inventoryScreenUI's transform
         foreach(Transform child in inventoryScreenUI.transform){
-            if (child.CompareTag("Slot")){
+            if (child.CompareTag("Slots")){
                 slots.Add(child.gameObject); //add if child of inventoryUI is a slot
             }//end of if
         }//end of foreach
@@ -40,7 +40,6 @@ public class InventorySystem : MonoBehaviour
 
     void Update(){
         if (Input.GetKeyDown(KeyCode.E) && !isOpen){ //check if E key is pressed and if the inventory system is opened
-            //Debug.Log("E is pressed"); //check if worked
             inventoryScreenUI.SetActive(true); //becomes visible
             isOpen = true;
             Cursor.lockState = CursorLockMode.None; //can use mouse
@@ -54,31 +53,47 @@ public class InventorySystem : MonoBehaviour
         }//end of else if
     }//end of Update
 
-    public void addToInventory(string itemName){
-        equippedSlot = nextEmptySlot();
-        addedItem = (GameObject)Instantiate(Resources.Load<GameObject>(itemName), equippedSlot.transform.position, equippedSlot.transform.rotation);
-        addedItem.transform.SetParent(equippedSlot.transform); //set item as a child of the slot
-        itemList.Add(itemName);
-    }//end of addToInventory
+    //revised with the help of ChatGPT
+    public void AddToInventory(string itemName){
+        equippedSlot = NextEmptySlot(); //find empty slot
+        //exit if not empty slots
+        if(equippedSlot == null){
+            Debug.Log("Inventory is full");
+            return;
+        }//end of if
 
-    public bool checkFull(){
-        int counter = 0; //number of filled slots
+        GameObject itemPrefab = Resources.Load<GameObject>(itemName); //load prefab image from Resources folder
+        //leave if no prefab
+        if(itemPrefab == null){
+            Debug.Log("Item not found");
+            return;
+        }//end of if
+        addedItem = Instantiate(itemPrefab, equippedSlot.transform); //instantiate the UI prefab as a child of the empty slot
+        addedItem.transform.localPosition = Vector3.zero; //reset position in slot
+        addedItem.transform.localScale = Vector3.one; //good scale so it won't go out of the slot (.9)
+        addedItem.transform.SetParent(equippedSlot.transform, false); //reset parent and set false (don't keep world position)
+        itemList.Add(itemName); //add item to list in inspector
+    }//end of AddToInventory
+
+
+
+    //checks if the inventory is full or not
+    public bool CheckFull(){
+        int counter = 0;
         foreach(GameObject slot in slots){
-            if(slot.transform.childCount > 0){
-                counter += 1; //increase if slot has a child
+            if(slot.transform.childCount != 0){
+                counter++;
             }//end of if
         }//end of foreach
-        if(counter == 24) //amount of slots
-        {
-            return true;
+        if(counter == 24){ //max amount of slots
+            return true; //no more room
         }//end of if
-        else
-        {
-            return false;
-        }//end of if
+        else{
+            return false; //still has room
+        }//end of else
     }//end of checkFull
 
-     GameObject nextEmptySlot(){
+     private GameObject NextEmptySlot(){
         foreach(GameObject slot in slots){
             if(slot.transform.childCount == 0){ //no children = empty
                 return slot;

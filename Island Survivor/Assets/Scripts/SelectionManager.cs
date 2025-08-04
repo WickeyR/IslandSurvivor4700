@@ -8,8 +8,7 @@ public class SelectionManager : MonoBehaviour
 {
     public GameObject InteractionInfoUI; //allows us to turn UI element on and off
     Text interaction_text; //changing the text value directly in the Inspector
-    public float choppingDistance = 3f;
-
+    public float choppingDistance = 3f; //player must be in this range to chop a tree down
     public static object Instance { get; internal set; }
 
     private void Start(){

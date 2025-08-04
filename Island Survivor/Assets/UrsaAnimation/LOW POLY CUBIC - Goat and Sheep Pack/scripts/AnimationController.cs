@@ -55,11 +55,11 @@
         */
         //modified from rabbits code from lecture
         private Animator m_animator;
-        private AIMovement m_aiMovement;
+        private GoatAI m_aiMovement;
 
         void Start(){
             m_animator = GetComponent<Animator>();
-            m_aiMovement = GetComponent<AIMovement>();
+            m_aiMovement = GetComponent<GoatAI>();
         }//end of Start
 
         void Update(){

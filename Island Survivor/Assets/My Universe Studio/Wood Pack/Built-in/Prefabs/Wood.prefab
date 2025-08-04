@@ -149,8 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb3be0b3438a4658a203aa5fc1a4506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: 
-  playerInRange: 0
+  itemName: Wood (Psst Right Click!)
+  playerInRange: 1
 --- !u!65 &-3485724774787348269
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -184,4 +184,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff76ff03514b4951ad993ee33adbe8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}

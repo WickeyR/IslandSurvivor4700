@@ -19,9 +19,9 @@ public class ItemSlots : MonoBehaviour, IDropHandler
         Debug.Log("OnDrop");
         //can put in item if there is nothing in there
         if (!Item){
-            ItemDragNDrop.item.transform.SetParent(transform);
+            ItemDragNDrop.draggedItem.transform.SetParent(transform);
             //drops in center of the slot
-            ItemDragNDrop.item.transform.localPosition = new Vector2(0, 0);
+            ItemDragNDrop.draggedItem.transform.localPosition = new Vector2(0, 0);
         }//end of if
     }//end of OnDrop
 }//end of ItemSlots

@@ -10,18 +10,18 @@ public class TreeDrops : MonoBehaviour
     public int numWoodDrops = 1; //will give 1 pack of 6 logs of wood (count prefab logs image)
     public int numFoodDrops = 1; //will give 1 pack of food
     public AudioSource audioSource; //chopping sound effect when tree is hit
-    public ParticleSystem chopEffect; //will output smoke to let player know tree has been chopped sucessfully
+    //public ParticleSystem chopEffect; //will output smoke to let player know tree has been chopped sucessfully
 
     //Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        chopEffect = GetComponent<ParticleSystem>();
+        //chopEffect = GetComponent<ParticleSystem>();
     }//end of Start
 
     public void Chop(){
         if (audioSource != null){
-            audioSource.Play(); //play the chopping sound
+            audioSource.Play(); //play the chopping sound if there is audio
         }
         treeLife--; //decrease life with each hit
 
@@ -33,15 +33,17 @@ public class TreeDrops : MonoBehaviour
 
     private void killTree(){
         //special effect to let user know tree has been sucessfully chopped
+        /*
         if (chopEffect != null){
             chopEffect.Play(); //release smoke
         }
+        */
         Vector3 woodDropPosition = Random.insideUnitSphere * 0.5f; //drop wood at the tree's original position
         woodDropPosition.y = 0; //ensure drop remains on the floor
         Instantiate(woodDrops, transform.position + woodDropPosition, Quaternion.identity);
 
-        Vector3 fruitDropPosition = Random.insideUnitSphere * 1.5f; //drop wood at the tree's original position
-        fruitDropPosition.y = 0; //ensure drop remains on the floor
+        Vector3 fruitDropPosition = Random.insideUnitSphere * 1.75f; //drop wood at the tree's original position
+        fruitDropPosition.y = 0.05f; //ensure drop remains on the floor
         Instantiate(fruitDrops, transform.position + fruitDropPosition, Quaternion.identity);
     }//end of killTree
 
