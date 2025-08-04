@@ -112,3 +112,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wanderRadius: 10
   wanderInterval: 5
+  playerObject: {fileID: 0}
+  chaseRadius: 20
+  viewAngle: 270
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
