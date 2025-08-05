@@ -15,10 +15,20 @@ public class EnemyWander : MonoBehaviour
     public float      viewAngle    = 120f;
     public LayerMask  obstacleMask;
 
-    private Transform    player;
-    private NavMeshAgent agent;
-    private Animator     anim;
-    private float        timer;
+    [Header("Attack Settings")]
+    [Tooltip("How close the enemy must be to hit you")]
+    public float attackRange    = 1.5f;
+    [Tooltip("Damage dealt each hit")]
+    public float damagePerHit   = 10f;
+    [Tooltip("Seconds between hits")]
+    public float attackInterval = 1f;
+
+    private Transform     player;
+    private PlayerStats   playerStats;
+    private NavMeshAgent  agent;
+    private Animator      anim;
+    private float         timer;
+    private float         attackTimer;
 
     private enum State { Wander, Chase }
     private State current = State.Wander;
@@ -30,6 +40,7 @@ public class EnemyWander : MonoBehaviour
         agent.updatePosition = true;
         agent.updateRotation = true;
 
+        // find player transform
         if (playerObject != null)
             player = playerObject.transform;
         else
@@ -37,6 +48,10 @@ public class EnemyWander : MonoBehaviour
             var go = GameObject.FindGameObjectWithTag("Player");
             if (go != null) player = go.transform;
         }
+
+        // cache their PlayerStats component
+        if (player != null)
+            playerStats = player.GetComponent<PlayerStats>();
     }
 
     void OnEnable()
@@ -60,7 +75,9 @@ public class EnemyWander : MonoBehaviour
         {
             case State.Chase:
                 agent.SetDestination(player.position);
+                TryAttackPlayer();
                 break;
+
             case State.Wander:
                 timer += Time.deltaTime;
                 if (timer >= wanderInterval)
@@ -73,8 +90,30 @@ public class EnemyWander : MonoBehaviour
                 break;
         }
 
+        // update run/walk animation speed
         Vector3 horizVel = Vector3.ProjectOnPlane(agent.velocity, Vector3.up);
         anim.SetFloat("Speed", horizVel.magnitude);
+    }
+
+    private void TryAttackPlayer()
+    {
+        if (playerStats == null) return;
+
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist <= attackRange)
+        {
+            attackTimer += Time.deltaTime;
+            if (attackTimer >= attackInterval)
+            {
+                attackTimer = 0f;
+                playerStats.TakeDamage(damagePerHit);
+            }
+        }
+        else
+        {
+            // reset timer if out of range
+            attackTimer = 0f;
+        }
     }
 
     Vector3 RandomNavmeshLocation(float radius)
@@ -91,8 +130,7 @@ public class EnemyWander : MonoBehaviour
         Vector3 toPlayer = player.position - eyePos;
         float   dist     = toPlayer.magnitude;
         if (dist > chaseRadius) return false;
-        float angle = Vector3.Angle(transform.forward, toPlayer);
-        if (angle > viewAngle * 0.5f) return false;
+        if (Vector3.Angle(transform.forward, toPlayer) > viewAngle * 0.5f) return false;
         if (Physics.Raycast(eyePos, toPlayer.normalized, out var hit, chaseRadius, ~obstacleMask))
             return hit.transform == player;
         return false;
@@ -104,9 +142,7 @@ public class EnemyWander : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, wanderRadius);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, chaseRadius);
-        Vector3 rightDir = Quaternion.Euler(0, viewAngle * 0.5f, 0) * transform.forward;
-        Vector3 leftDir  = Quaternion.Euler(0, -viewAngle * 0.5f, 0) * transform.forward;
-        Gizmos.DrawLine(transform.position, transform.position + rightDir * chaseRadius);
-        Gizmos.DrawLine(transform.position, transform.position + leftDir  * chaseRadius);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
