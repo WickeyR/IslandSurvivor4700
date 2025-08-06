@@ -5,14 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - MainLight
+  - Tree
+  - Drops
+  - Slots
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - Player
   - Water
   - UI
-  - Obstacles
+  - NavMesh
   - 
   - 
   - 
