@@ -13,7 +13,7 @@ public class MouseLook : MonoBehaviour
     }//end of Start
 
     private void Update(){
-        if (InventorySystem.Instance.isOpen == false) {//check for input
+        if (InventorySystem.Instance.isOpen==false && CraftingSystem.Instance.isOpen==false) {//check for input
             // read input
             var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;

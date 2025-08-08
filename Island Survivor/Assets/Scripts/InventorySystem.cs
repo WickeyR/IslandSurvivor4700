@@ -40,6 +40,7 @@ public class InventorySystem : MonoBehaviour
 
     void Update(){
         if (Input.GetKeyDown(KeyCode.E) && !isOpen){ //check if E key is pressed and if the inventory system is opened
+            Debug.Log("Inventory Opened");
             inventoryScreenUI.SetActive(true); //becomes visible
             isOpen = true;
             Cursor.lockState = CursorLockMode.None; //can use mouse
@@ -47,9 +48,13 @@ public class InventorySystem : MonoBehaviour
         }//end of if
         else if (Input.GetKeyDown(KeyCode.E) && isOpen){ //will close inventory
             inventoryScreenUI.SetActive(false);
+
+            if (!CraftingSystem.Instance.isOpen){ //only lock if both screens are closed
+                Cursor.lockState = CursorLockMode.Locked; //can not use mouse
+                Cursor.visible = false;
+            }//end of if
+
             isOpen = false;
-            Cursor.lockState = CursorLockMode.Locked; //can not use mouse
-            Cursor.visible = false;
         }//end of else if
     }//end of Update
 
@@ -73,9 +78,27 @@ public class InventorySystem : MonoBehaviour
         addedItem.transform.localScale = Vector3.one; //good scale so it won't go out of the slot (.9)
         addedItem.transform.SetParent(equippedSlot.transform, false); //reset parent and set false (don't keep world position)
         itemList.Add(itemName); //add item to list in inspector
+      
+        /*
+        equippedSlot = NextEmptySlot();
+        addedItem = Instantiate(Resources.Load<GameObject>(itemName), equippedSlot.transform.position, equippedSlot.transform.rotation);
+        addedItem.transform.SetParent(equippedSlot.transform);
+        itemList.Add(itemName);
+        */
     }//end of AddToInventory
 
+    public void RemoveItem(string n, int amount){
+        int counter = amount;
 
+        for(int i=slots.Count; i>=0; i--){ //find item and remove
+            if(slots[i].transform.childCount > 0){ //start from last slot for good UI
+                if(slots[i].transform.GetChild(0).name == n+" (Clone)" && counter!=0){ //if match material needed, then remove it
+                    Destroy(slots[i].transform.GetChild(0).gameObject);
+                    counter--;
+                }//end of if
+            }//end of if
+        }//end of for
+    }//end of RemoveItem
 
     //checks if the inventory is full or not
     public bool CheckFull(){
@@ -101,4 +124,18 @@ public class InventorySystem : MonoBehaviour
         }//end of foreach
         return new GameObject();
     }//end of nextEmptySlot
+
+    //recalculates inventory list after the player crafts something
+    public void RecalculateList(){
+        itemList.Clear(); //redo list so it must be emptied
+        foreach(GameObject slot in slots){
+            if(slot.transform.childCount > 0){
+                string tempName = slot.transform.GetChild(0).name; //ex: will get Stone (Clone)
+                string fullName = tempName;
+                string clone = " (Clone)";
+                string newName = name.Replace(clone, "");
+                itemList.Add(newName);
+            }//end of if
+        }//end of foreach
+    }//end of RecalculationList
 }//end of InventorySystem class

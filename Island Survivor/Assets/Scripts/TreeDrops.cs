@@ -25,7 +25,7 @@ public class TreeDrops : MonoBehaviour
         }
         treeLife--; //decrease life with each hit
 
-        if (treeLife == 0){
+        if (treeLife <= 0){
             killTree();
             Destroy(gameObject); //replace the tree with the wood drops
         }//end of if
@@ -38,13 +38,17 @@ public class TreeDrops : MonoBehaviour
             chopEffect.Play(); //release smoke
         }
         */
-        Vector3 woodDropPosition = Random.insideUnitSphere * 0.5f; //drop wood at the tree's original position
-        woodDropPosition.y = 0; //ensure drop remains on the floor
-        Instantiate(woodDrops, transform.position + woodDropPosition, Quaternion.identity);
+        for(int i=0; i<numWoodDrops; i++){
+            Vector3 woodDropPosition = Random.insideUnitSphere * 0.5f; //drop wood at the tree's original position
+            woodDropPosition.y = 0; //ensure drop remains on the floor
+            Instantiate(woodDrops, transform.position + woodDropPosition, Quaternion.identity);
+        }//end of for loop
 
-        Vector3 fruitDropPosition = Random.insideUnitSphere * 1.75f; //drop wood at the tree's original position
-        fruitDropPosition.y = 0.05f; //ensure drop remains on the floor
-        Instantiate(fruitDrops, transform.position + fruitDropPosition, Quaternion.identity);
+        for (int j=0; j<numFoodDrops; j++){
+            Vector3 fruitDropPosition = Random.insideUnitSphere * 1.75f; //drop wood at the tree's original position
+            fruitDropPosition.y = 0.05f; //ensure drop remains on the floor
+            Instantiate(fruitDrops, transform.position + fruitDropPosition, Quaternion.identity);
+        }//end of for loop
     }//end of killTree
 
     //Update is called once per frame

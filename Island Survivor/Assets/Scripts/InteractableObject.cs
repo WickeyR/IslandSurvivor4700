@@ -14,7 +14,7 @@ public class InteractableObject : MonoBehaviour
 
     //pick up the item with right click into inventory
     void Update(){
-         if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange){ //right click to add inventory
+         if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange /*&& SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject==gameObject*/){ //right click to add inventory
             if (!InventorySystem.Instance.CheckFull()){ //check if inventory is full before adding item
                 InventorySystem.Instance.AddToInventory(itemName); //add item name to inventory
                 Debug.Log("works");

@@ -8,6 +8,7 @@ TagManager:
   - Tree
   - Drops
   - Slots
+  - Goat
   layers:
   - Default
   - TransparentFX
