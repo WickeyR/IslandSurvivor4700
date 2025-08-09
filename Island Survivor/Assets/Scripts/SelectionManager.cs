@@ -23,21 +23,18 @@ public class SelectionManager : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //casts a ray from the center of the screen
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
-        { //checks if the ray hit anything and stores information in hit if something was hit
+        if (Physics.Raycast(ray, out hit)){ //checks if the ray hit anything and stores information in hit if something was hit
             var selectionTransform = hit.transform; //grabs hit object
             InteractableObject thing = selectionTransform.GetComponent<InteractableObject>();
 
-            if (thing != null && thing.playerInRange)
-            {
+            if (thing != null && thing.playerInRange){
                 //grabs the item name to display
                 onTarget = true;
                 selectedObject = thing.gameObject;
                 interaction_text.text = thing.GetItemName();
                 InteractionInfoUI.SetActive(true);
             }//end of if
-            else
-            {//hit but no script on item
+            else{//hit but no script on item
                 onTarget = false;
                 InteractionInfoUI.SetActive(false); //shows nothing if object is not interactable
             }//end of else
@@ -48,14 +45,11 @@ public class SelectionManager : MonoBehaviour
         }
 
         //for chopping down trees
-        if (Input.GetMouseButtonDown(0))
-        { //use left click to chop (0-left, 1-right, 2-scroller)
+        if (Input.GetMouseButtonDown(0)){ //use left click to chop (0-left, 1-right, 2-scroller)
             //chop tree if player is within chopping distance and it is an interactable tree
-            if (hit.collider.CompareTag("Tree") && hit.distance <= choppingDistance)
-            {
+            if (hit.collider.CompareTag("Tree") && hit.distance <= choppingDistance){
                 TreeDrops drops = hit.collider.GetComponent<TreeDrops>(); //get the tree component
-                if (drops != null)
-                {
+                if (drops != null){
                     drops.Chop(); //call chopping method to hit tree
                 }//end of if
             }//end of if

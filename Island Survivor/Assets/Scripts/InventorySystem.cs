@@ -90,9 +90,9 @@ public class InventorySystem : MonoBehaviour
     public void RemoveItem(string n, int amount){
         int counter = amount;
 
-        for(int i=slots.Count; i>=0; i--){ //find item and remove
+        for(int i=slots.Count-1; i>=0; i--){ //find item and remove
             if(slots[i].transform.childCount > 0){ //start from last slot for good UI
-                if(slots[i].transform.GetChild(0).name == n+" (Clone)" && counter!=0){ //if match material needed, then remove it
+                if(slots[i].transform.GetChild(0).name == n+"(Clone)" && counter!=0){ //if match material needed, then remove it
                     Destroy(slots[i].transform.GetChild(0).gameObject);
                     counter--;
                 }//end of if
@@ -131,9 +131,10 @@ public class InventorySystem : MonoBehaviour
         foreach(GameObject slot in slots){
             if(slot.transform.childCount > 0){
                 string tempName = slot.transform.GetChild(0).name; //ex: will get Stone (Clone)
-                string fullName = tempName;
-                string clone = " (Clone)";
-                string newName = name.Replace(clone, "");
+                //string fullName = tempName;
+                //string clone = "(Clone)";
+                //string newName = fullName.Replace(clone, "");
+                string newName = tempName.Replace("(Clone)", "").Trim();
                 itemList.Add(newName);
             }//end of if
         }//end of foreach
