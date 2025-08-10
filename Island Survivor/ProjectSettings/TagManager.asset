@@ -9,6 +9,7 @@ TagManager:
   - Drops
   - Slots
   - Goat
+  - Enemy
   layers:
   - Default
   - TransparentFX

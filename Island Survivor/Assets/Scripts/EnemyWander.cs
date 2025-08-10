@@ -29,6 +29,7 @@ public class EnemyWander : MonoBehaviour
     private Animator      anim;
     private float         timer;
     private float         attackTimer;
+    private EnemyHealth selfHealth;
 
     private enum State { Wander, Chase }
     private State current = State.Wander;
@@ -39,6 +40,7 @@ public class EnemyWander : MonoBehaviour
         anim  = GetComponent<Animator>();
         agent.updatePosition = true;
         agent.updateRotation = true;
+        selfHealth = GetComponent<EnemyHealth>();
 
         // find player transform
         if (playerObject != null)
@@ -61,6 +63,8 @@ public class EnemyWander : MonoBehaviour
 
     void Update()
     {
+        if (selfHealth != null && selfHealth.IsDead) return;
+
         if (player != null && CanSeePlayer())
             current = State.Chase;
         else if (current == State.Chase

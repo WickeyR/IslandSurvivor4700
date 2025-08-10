@@ -11,8 +11,11 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Depletion Rates (per second)")]
     public float hungerDepletionRate = 0.5f;
-    public float thirstDepletionRate = 0.7f;
-    public float healthDepletionRate = 1f; 
+    public float thirstDepletionRate = 0.5f;
+    public float healthDepletionRate = 1f;
+
+    [Header("Regen")]
+    public float healthRegenPerSecond = 2f;
 
     [Header("UI Sliders")]
     public Slider healthBar;
@@ -40,14 +43,12 @@ public class PlayerStats : MonoBehaviour
         currentHunger = maxHunger;
         currentThirst = maxThirst;
         UpdateUI();
-
         if (damageFlashImage != null)
         {
             Color c = damageFlashImage.color;
             c.a = 0f;
             damageFlashImage.color = c;
         }
-
         if (respawnPanel != null)
             respawnPanel.SetActive(false);
     }
@@ -55,33 +56,29 @@ public class PlayerStats : MonoBehaviour
     void Update()
     {
         if (isDead) return;
-
-        // Hunger depletion
         currentHunger -= hungerDepletionRate * Time.deltaTime;
         currentHunger = Mathf.Max(currentHunger, 0f);
-
-        // Thirst depletion
         currentThirst -= thirstDepletionRate * Time.deltaTime;
         currentThirst = Mathf.Max(currentThirst, 0f);
-
-        // Damage from starvation or dehydration
         if (currentHunger <= 0f || currentThirst <= 0f)
             TakeDamage(healthDepletionRate * Time.deltaTime, false);
-
+        bool wellFed = (currentHunger / maxHunger) > 0.5f;
+        bool wellHydrated = (currentThirst / maxThirst) > 0.5f;
+        if (wellFed && wellHydrated && currentHealth < maxHealth)
+        {
+            currentHealth = Mathf.Min(maxHealth, currentHealth + healthRegenPerSecond * Time.deltaTime);
+        }
         UpdateUI();
     }
 
     public void TakeDamage(float amount, bool showFlash = true)
     {
         if (isDead) return;
-
         currentHealth -= amount;
         currentHealth = Mathf.Max(currentHealth, 0f);
         UpdateUI();
-
         if (showFlash && damageFlashImage != null)
             StartCoroutine(DamageFlash());
-
         if (currentHealth <= 0f)
             Die();
     }
@@ -91,9 +88,7 @@ public class PlayerStats : MonoBehaviour
         Color c = damageFlashImage.color;
         c.a = flashMaxAlpha;
         damageFlashImage.color = c;
-
         yield return new WaitForSecondsRealtime(flashDuration);
-
         float elapsed = 0f;
         while (elapsed < flashFadeTime)
         {
@@ -102,7 +97,6 @@ public class PlayerStats : MonoBehaviour
             damageFlashImage.color = c;
             yield return null;
         }
-
         c.a = 0f;
         damageFlashImage.color = c;
     }
@@ -112,37 +106,25 @@ public class PlayerStats : MonoBehaviour
         isDead = true;
         var pc = GetComponent<PlayerController>();
         if (pc != null) pc.enabled = false;
-
-        if (respawnPanel != null)
-            respawnPanel.SetActive(true);
-
+        if (respawnPanel != null) respawnPanel.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-
         Time.timeScale = 0f;
     }
 
     public void OnRespawnButton()
     {
         Time.timeScale = 1f;
-
-        if (respawnPanel != null)
-            respawnPanel.SetActive(false);
-
+        if (respawnPanel != null) respawnPanel.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
         currentHealth = maxHealth;
         currentHunger = maxHunger;
         currentThirst = maxThirst;
         UpdateUI();
-
-        if (spawnPoint != null)
-            transform.position = spawnPoint.position;
-
+        if (spawnPoint != null) transform.position = spawnPoint.position;
         var pc = GetComponent<PlayerController>();
         if (pc != null) pc.enabled = true;
-
         isDead = false;
     }
 
@@ -160,9 +142,10 @@ public class PlayerStats : MonoBehaviour
         UpdateUI();
     }
 
-    public void Drink(float thirstAmount)
+    public void Drink(float thirstAmount, float healthAmount = 0f)
     {
         currentThirst = Mathf.Min(currentThirst + thirstAmount, maxThirst);
+        currentHealth = Mathf.Min(currentHealth + healthAmount, maxHealth);
         UpdateUI();
     }
 
