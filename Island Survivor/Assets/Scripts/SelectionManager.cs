@@ -20,7 +20,7 @@ public class SelectionManager : MonoBehaviour
     }//end of start
 
     void Update(){
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //casts a ray from the center of the screen
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //casts a ray from the center of the screen
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit)){ //checks if the ray hit anything and stores information in hit if something was hit
@@ -31,7 +31,7 @@ public class SelectionManager : MonoBehaviour
                 //grabs the item name to display
                 onTarget = true;
                 selectedObject = thing.gameObject;
-                interaction_text.text = thing.GetItemName();
+                interaction_text.text = string.IsNullOrEmpty(thing.interactionHint) ? thing.GetItemName() : thing.interactionHint;
                 InteractionInfoUI.SetActive(true);
             }//end of if
             else{//hit but no script on item

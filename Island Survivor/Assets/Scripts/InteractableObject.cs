@@ -6,6 +6,17 @@ public class InteractableObject : MonoBehaviour
 {
     public string itemName;
     public bool playerInRange;
+    public bool isWaterSource;
+    public string interactionHint;
+
+    private PlayerStats playerStats;
+
+    void Start()
+    {
+        playerStats = FindObjectOfType<PlayerStats>();
+        if (string.IsNullOrEmpty(interactionHint))
+            interactionHint = isWaterSource ? "Press Right Click to Drink" : itemName;
+    }
 
     //displays object name
     public string GetItemName(){
@@ -15,14 +26,25 @@ public class InteractableObject : MonoBehaviour
     //pick up the item with right click into inventory
     void Update(){
          if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange /*&& SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject==gameObject*/){ //right click to add inventory
-            if (!InventorySystem.Instance.CheckFull()){ //check if inventory is full before adding item
-                InventorySystem.Instance.AddToInventory(itemName); //add item name to inventory
-                Debug.Log("works");
-                Destroy(gameObject); //disappear from view and is added to inventory
-            }//end of if
-            else{
-                Debug.Log("Inventory is full");
-            }//end of else
+            if (isWaterSource)
+            {
+                if (playerStats != null)
+                {
+                    playerStats.DrinkFull();
+                    Debug.Log("You drank water!");
+                }
+            }
+            else
+            {
+                if (!InventorySystem.Instance.CheckFull()){ //check if inventory is full before adding item
+                    InventorySystem.Instance.AddToInventory(itemName); //add item name to inventory
+                    Debug.Log("works");
+                    Destroy(gameObject); //disappear from view and is added to inventory
+                }//end of if
+                else{
+                    Debug.Log("Inventory is full");
+                }//end of else
+            }
          }//end of if
     }//end of Update
 
