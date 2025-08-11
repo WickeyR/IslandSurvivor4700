@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7413228793823172479}
   - component: {fileID: 4794430135317665039}
   - component: {fileID: 8816784354115880181}
+  - component: {fileID: 6579328423798566614}
   m_Layer: 5
   m_Name: Fruit (Psst Right Click!)
   m_TagString: Untagged
@@ -114,5 +115,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb3be0b3438a4658a203aa5fc1a4506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Fruit
+  itemName: Fruit (Psst Right Click!)
   playerInRange: 0
+  isWaterSource: 0
+  interactionHint: 
+--- !u!114 &6579328423798566614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964506748679039370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186ff647de1443a790f44031544b9acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemName: Banana
+  amountIsPercent: 1
+  hungerAmount: 0.3
+  healthAmount: 0
