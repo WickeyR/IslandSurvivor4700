@@ -9,7 +9,7 @@ public class CraftingSystem : MonoBehaviour
     public GameObject craftingScreenUI;
     public GameObject toolsScreenUI; //crafting tools
     public GameObject boatScreenUI; //crafting the escape boat
-    public GameObject paddleScreenUI; //crafting paddle for boat
+    public GameObject baseScreenUI; //crafting paddle for boat
     public List<string> inventoryList = new List<string>();
     public bool isOpen; //check if screen is open
     //create reference for the crafting buttons
@@ -109,13 +109,8 @@ public class CraftingSystem : MonoBehaviour
         craftBoatBTN.onClick.AddListener(delegate { CraftItem(Boat); });
         //boatScreenUI.SetActive(boatActive); //make invisible again
 
-        //open paddle crafting screen
-        //bool wasActive = toolsScreenUI.activeSelf;
-        //toolsScreenUI.SetActive(true);
-        paddleBTN = craftingScreenUI.transform.Find("paddleButton").GetComponent<Button>();
-        paddleBTN.onClick.AddListener(delegate { OpenPaddleCategory(); });
         //Debug.Log("worked");
-        Transform paddleTransform = paddleScreenUI.transform.Find("Paddle");
+        Transform paddleTransform = boatScreenUI.transform.Find("Paddle");
         paddleReq1 = paddleTransform.Find("paddleReq1").GetComponent<TextMeshProUGUI>();
         paddleReq2 = paddleTransform.Find("paddleReq2").GetComponent<TextMeshProUGUI>();
         paddleReq3 = paddleTransform.Find("paddleReq3").GetComponent<TextMeshProUGUI>();
@@ -139,7 +134,7 @@ public class CraftingSystem : MonoBehaviour
             craftingScreenUI.SetActive(false);
             toolsScreenUI.SetActive(false); //close just in case
             boatScreenUI.SetActive(false);
-            paddleScreenUI.SetActive(false);
+            baseScreenUI.SetActive(false);
             if (!InventorySystem.Instance.isOpen){ //only lock if both screens are closed
                 Cursor.lockState = CursorLockMode.Locked; //can not use mouse
                 Cursor.visible = false;
@@ -164,6 +159,7 @@ public class CraftingSystem : MonoBehaviour
         RefreshReqs(); //get newest requirements
     }//end of OpenBoatCategory
 
+    /*
     //open the paddle boat crafting page
     private void OpenPaddleCategory(){
         craftingScreenUI.SetActive(false); //close crafting screen
@@ -171,6 +167,7 @@ public class CraftingSystem : MonoBehaviour
         //Debug.Log("opened");
         RefreshReqs();
     }//end of OpenPaddleCategory
+    */
 
     private void CraftItem(ItemBlueprint craftable){
         //check that all items are there if crafting again
