@@ -193,7 +193,7 @@ public class CraftingSystem : MonoBehaviour
         InventorySystem.Instance.RecalculateList();
     }//end of calculate
 
-    private void RefreshReqs(){
+    public void RefreshReqs(){
         //crafting materials
         int rockCount = 0; //amount of rocks needed
         int woodCount = 0; //amount of wood need
