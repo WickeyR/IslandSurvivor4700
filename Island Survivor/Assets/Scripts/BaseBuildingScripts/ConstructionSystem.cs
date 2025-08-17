@@ -41,6 +41,10 @@ public class ConstructionSystem : MonoBehaviour
         item.name = itemToConstruct;
         //set new parent to the character's holding spot for the item
         item.transform.SetParent(constructionHoldingSpot.transform, false);
+
+        //item.transform.localPosition = Vector3.zero; //spawn at holding spot
+        //item.transform.localRotation = Quaternion.identity;
+
         itemToBeConstructed = item;
         itemToBeConstructed.gameObject.tag = "activeConstructable";
 
@@ -112,6 +116,13 @@ public class ConstructionSystem : MonoBehaviour
     }//end of ZPositionToAccurateFloat
 
     private void Update(){
+        //check to see if player has selected an item before allowing construction mode to happen
+        if (inConstructionMode && (itemToBeConstructed == null || itemToBeConstructed.Equals(null))){
+            Debug.LogWarning("itemToBeConstructed was destroyed or null. Exiting construction mode safely.");
+            inConstructionMode = false;
+            return;
+        }//end of if
+
         //display instructions when in construction mode
         if (inConstructionMode){
             constructionUI.SetActive(true);
@@ -120,20 +131,31 @@ public class ConstructionSystem : MonoBehaviour
             constructionUI.SetActive(false);
         }//end of else
 
-        if (itemToBeConstructed != null && inConstructionMode){
-            if (itemToBeConstructed.name == "FoundationModel"){ //ADD FOR CAMPFIRE LATER
-                //for foundation placement
-                if (CheckValidConstructionPosition()){
-                    isValidPlacement = true;
-                    itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
-                }//end of if
-                else{
-                    isValidPlacement = false;
-                    itemToBeConstructed.GetComponent<Constructable>().SetInvalidColor();
-                }//end of else
+        if (inConstructionMode){ //double check that itemToBeConstructed has things in it
+            if (itemToBeConstructed == null || itemToBeConstructed.Equals(null)){
+                Debug.LogWarning("itemToBeConstructed is not assigned or was destroyed.");
+                constructionUI.SetActive(false); // Hide UI
+                return; // Exit Update early
             }//end of if
+            else{
+                if (itemToBeConstructed.name == "FoundationModel"){ //ADD FOR CAMPFIRE LATER
+                  //for foundation placement
+                    if (CheckValidConstructionPosition()){
+                        isValidPlacement = true;
+                        itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
+                    }//end of if
+                    else{
+                        isValidPlacement = false;
+                        itemToBeConstructed.GetComponent<Constructable>().SetInvalidColor();
+                    }//end of else
+                }//end of if
+            }//end of else
         }//end of if
-
+        else{
+            constructionUI.SetActive(false);
+            return;
+        }//end of else
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         //ADD FOR CAMPFIRE LATER
@@ -158,6 +180,7 @@ public class ConstructionSystem : MonoBehaviour
 
         // Left Mouse Click to Place item
         if (Input.GetMouseButtonDown(0) && inConstructionMode){
+            //Debug.Log("Left click");
             //ADD FOR CAMPFIRE LATER
             if (isValidPlacement && selectedGhost == null && itemToBeConstructed.name == "FoundationModel"){ //We don't want the freestyle to be triggered when we select a ghost.
                 PlaceItemFreeStyle(); //only for foundation or campfire, walls must be on foundation
@@ -244,10 +267,29 @@ public class ConstructionSystem : MonoBehaviour
         return false;
     }//end of CheckValidConstructionPosition
 
+    /*
     void DestroyItem(GameObject item){
         Destroy(item);
         InventorySystem.Instance.RecalculateList();
         CraftingSystem.Instance.RefreshReqs();
     }//end of DestroyItem
+    */
+    void DestroyItem(GameObject item){
+        if (item != null){
+            Destroy(item);
+        }//end of if
+        InventorySystem.Instance.RecalculateList();
+        CraftingSystem.Instance.RefreshReqs();
+        StartCoroutine(Clear(item));
+    }//end of DestroyItem
+
+    //delay destruction of item
+    private IEnumerator Clear(GameObject item){
+        yield return null; // wait one frame
+        if (itemToBeConstructed == item){
+            itemToBeConstructed = null;
+        }//end of if
+    }//end of IEnumerator
+
 }//end of ConstructionSystem
 

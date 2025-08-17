@@ -14,18 +14,13 @@ public class CraftingSystem : MonoBehaviour
     public bool isOpen; //check if screen is open
     //create reference for the crafting buttons
     Button toolsBTN, boatBTN, baseBTN;
-    Button craftHammerBTN, craftNailsBTN, craftBoatBTN, craftPaddleBTN, craftFoundationBTN, craftWallBTN;
+    Button craftHammerBTN, craftNailsBTN, craftBoatBTN, craftPaddleBTN, craftFoundationBTN, craftWallBTN, craftFireBTN;
     //create reference for requirements
-    TextMeshProUGUI hammerReq1, hammerReq2, nailsReq1, boatReq1, boatReq2, boatReq3, paddleReq1, paddleReq2, paddleReq3, foundationReq1, foundationReq2, foundationReq3, wallReq1, wallReq2, wallReq3;
+    TextMeshProUGUI hammerReq1, hammerReq2, nailsReq1, boatReq1, boatReq2, boatReq3, paddleReq1, paddleReq2, paddleReq3, foundationReq1, foundationReq2, foundationReq3, wallReq1, wallReq2, wallReq3, fireReq1, fireReq2, fireReq3;
     //item blueprints;
     //item blueprints
     //item blueprints
-    public ItemBlueprint Hammer;
-    public ItemBlueprint Nails;
-    public ItemBlueprint Boat;
-    public ItemBlueprint Paddle;
-    public ItemBlueprint Foundation;
-    public ItemBlueprint Wall;
+    public ItemBlueprint Hammer, Nails, Boat, Paddle, Foundation, Wall, Fire;
 
     //singleton pattern
     public static CraftingSystem Instance { get; set; }
@@ -96,6 +91,16 @@ public class CraftingSystem : MonoBehaviour
         Wall.req2Amount = 3;
         Wall.reqHammerAmount = 1;
         Wall.numOfReqs = 3;
+        //make blueprint for Fire
+        GameObject bpFire = new GameObject("Fire");
+        Fire = bpFire.AddComponent<ItemBlueprint>();
+        Fire.itemName = "Fire";
+        Fire.req1 = "Wood (Psst Right Click!)";
+        Fire.req2 = "Rock (Psst Right Click!)";
+        Fire.req1Amount = 3;
+        Fire.req2Amount = 5;
+        Fire.reqHammerAmount = 0;
+        Fire.numOfReqs = 2;
     }//end of Awake
 
     // Start is called before the first frame update
@@ -120,12 +125,14 @@ public class CraftingSystem : MonoBehaviour
         //to open boat screen
         boatBTN = craftingScreenUI.transform.Find("boatButton").GetComponent<Button>();
         boatBTN.onClick.AddListener(delegate { OpenBoatCategory(); });
+        //for boat
         Transform boatTransform = boatScreenUI.transform.Find("Boat");
         boatReq1 = boatTransform.Find("boatReq1").GetComponent<TextMeshProUGUI>();
         boatReq2 = boatTransform.Find("boatReq2").GetComponent<TextMeshProUGUI>();
         boatReq3 = boatTransform.Find("boatReq3").GetComponent<TextMeshProUGUI>(); //the hammer
         craftBoatBTN = boatTransform.Find("craftBoatBTN").GetComponent<Button>();
         craftBoatBTN.onClick.AddListener(delegate { CraftItem(Boat); });
+        //for paddle
         Transform paddleTransform = boatScreenUI.transform.Find("Paddle");
         paddleReq1 = paddleTransform.Find("paddleReq1").GetComponent<TextMeshProUGUI>();
         paddleReq2 = paddleTransform.Find("paddleReq2").GetComponent<TextMeshProUGUI>();
@@ -136,18 +143,27 @@ public class CraftingSystem : MonoBehaviour
         //to open base screen
         baseBTN = craftingScreenUI.transform.Find("baseButton").GetComponent<Button>();
         baseBTN.onClick.AddListener(delegate { OpenBaseCategory(); });
+        //for foundation
         Transform foundationTransform = baseScreenUI.transform.Find("Foundation");
         foundationReq1 = foundationTransform.Find("foundationReq1").GetComponent<TextMeshProUGUI>();
         foundationReq2 = foundationTransform.Find("foundationReq2").GetComponent<TextMeshProUGUI>();
         foundationReq3 = foundationTransform.Find("foundationReq3").GetComponent<TextMeshProUGUI>(); //the hammer
         craftFoundationBTN = foundationTransform.Find("craftFoundationBTN").GetComponent<Button>();
         craftFoundationBTN.onClick.AddListener(delegate { CraftItem(Foundation); });
+        //for wall
         Transform wallTransform = baseScreenUI.transform.Find("Wall");
         wallReq1 = wallTransform.Find("wallReq1").GetComponent<TextMeshProUGUI>();
         wallReq2 = wallTransform.Find("wallReq2").GetComponent<TextMeshProUGUI>();
         wallReq3 = wallTransform.Find("wallReq3").GetComponent<TextMeshProUGUI>();
         craftWallBTN = wallTransform.Find("craftWallBTN").GetComponent<Button>();
         craftWallBTN.onClick.AddListener(delegate { CraftItem(Wall); });
+        //for fire
+        Transform fireTransform = baseScreenUI.transform.Find("Fire");
+        fireReq1 = fireTransform.Find("fireReq1").GetComponent<TextMeshProUGUI>();
+        fireReq2 = fireTransform.Find("fireReq2").GetComponent<TextMeshProUGUI>();
+        fireReq3 = fireTransform.Find("fireReq3").GetComponent<TextMeshProUGUI>();
+        craftFireBTN = fireTransform.Find("craftFireBTN").GetComponent<Button>();
+        craftFireBTN.onClick.AddListener(delegate { CraftItem(Fire); });
 
         RefreshReqs(); //get updated reqs
     }//end of Start
@@ -292,29 +308,36 @@ public class CraftingSystem : MonoBehaviour
         }//end of else
 
         //Foundation display
-        foundationReq1.text = "Three pieces of Wood [" + woodCount + "]";
+        foundationReq1.text = "Three Wood [" + woodCount + "]";
         foundationReq2.text = "Three nails [" + nailCount + "]";
         foundationReq3.text = "One hammer [" + hammerCount + "]";
-        if (woodCount >= Foundation.req1Amount && nailCount >= Foundation.req2Amount && hammerCount >= Foundation.reqHammerAmount)
-        {
+        if (woodCount >= Foundation.req1Amount && nailCount >= Foundation.req2Amount && hammerCount >= Foundation.reqHammerAmount){
             craftFoundationBTN.gameObject.SetActive(true);
         }//end of if
-        else
-        {
+        else{
             craftFoundationBTN.gameObject.SetActive(false);
         }//end of else
 
         //Wall display
-        wallReq1.text = "Two pieces of Wood [" + woodCount + "]";
+        wallReq1.text = "Two Wood [" + woodCount + "]";
         wallReq2.text = "Three nails [" + nailCount + "]";
         wallReq3.text = "One hammer [" + hammerCount + "]";
-        if (woodCount >= Wall.req1Amount && nailCount >= Wall.req2Amount && hammerCount >= Wall.reqHammerAmount)
-        {
+        if(woodCount >= Wall.req1Amount && nailCount >= Wall.req2Amount && hammerCount >= Wall.reqHammerAmount){
             craftWallBTN.gameObject.SetActive(true);
         }//end of if
-        else
-        {
+        else{
             craftWallBTN.gameObject.SetActive(false);
+        }//end of else
+
+        //Fire display
+        fireReq1.text = "Three Wood [" + woodCount + "]";
+        fireReq2.text = "Five nails [" + nailCount + "]";
+        fireReq3.text = "One hammer [" + hammerCount + "]";
+        if(woodCount >= Fire.req1Amount && nailCount >= Fire.req2Amount){
+            craftFireBTN.gameObject.SetActive(true);
+        }//end of if
+        else{
+            craftFireBTN.gameObject.SetActive(false);
         }//end of else
     }//end of RefreshReqs
 

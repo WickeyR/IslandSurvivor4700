@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 434698}
   m_Layer: 0
-  m_Name: CampFire_01
+  m_Name: FireModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

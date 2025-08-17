@@ -41,12 +41,15 @@ public class Constructable : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")){
             isGrounded = true; //item is on the ground
+            Debug.Log("Hit Ground");
         }//end of if
         if (other.CompareTag("Tree") || other.CompareTag("Rock") || other.CompareTag("Drops") || other.CompareTag("Goat") && gameObject.CompareTag("activeConstructable")){
             isOverlappingItems = true; //item is touching other items (trees, goats, drops, rocks)
+            Debug.Log("Hit Tree");
         }//end of if
         if (other.gameObject.CompareTag("ghost") && gameObject.CompareTag("activeConstructable")){
             detectedGhostMemeber = true; //item is overlapping anothe ghost item
+            Debug.Log("Hit Ghost");
         }//end of if
     }//end of OnTriggerEnter
 
