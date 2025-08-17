@@ -10,6 +10,13 @@ TagManager:
   - Slots
   - Goat
   - Enemy
+  - Rock
+  - Ground
+  - ghost
+  - wallGhost
+  - placedWall
+  - placedFoundation
+  - activeConstructable
   layers:
   - Default
   - TransparentFX

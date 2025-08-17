@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5061330196315536310}
   - component: {fileID: 5973581867366959199}
   - component: {fileID: 9030766721735341611}
-  - component: {fileID: 7799904051494021249}
+  - component: {fileID: -8546250419470374069}
   m_Layer: 5
   m_Name: Foundation
   m_TagString: Untagged
@@ -115,11 +115,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eb3be0b3438a4658a203aa5fc1a4506, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Fruit (Psst Right Click!)
+  itemName: Foundation
   playerInRange: 0
   isWaterSource: 0
   interactionHint: 
---- !u!114 &7799904051494021249
+--- !u!114 &-8546250419470374069
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,10 +128,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6083155582813144860}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 186ff647de1443a790f44031544b9acb, type: 3}
+  m_Script: {fileID: 11500000, guid: 61cd6e9e0b7104ddc99b80c6d5524264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Banana
-  amountIsPercent: 1
-  hungerAmount: 0.3
-  healthAmount: 0
+  isUseable: 1

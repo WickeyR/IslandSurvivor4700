@@ -13,15 +13,19 @@ public class CraftingSystem : MonoBehaviour
     public List<string> inventoryList = new List<string>();
     public bool isOpen; //check if screen is open
     //create reference for the crafting buttons
-    Button toolsBTN, boatBTN, paddleBTN;
-    Button craftHammerBTN, craftNailsBTN, craftBoatBTN, craftPaddleBTN;
+    Button toolsBTN, boatBTN, baseBTN;
+    Button craftHammerBTN, craftNailsBTN, craftBoatBTN, craftPaddleBTN, craftFoundationBTN, craftWallBTN;
     //create reference for requirements
-    TextMeshProUGUI hammerReq1, hammerReq2, nailsReq1, boatReq1, boatReq2, boatReq3, paddleReq1, paddleReq2, paddleReq3;
+    TextMeshProUGUI hammerReq1, hammerReq2, nailsReq1, boatReq1, boatReq2, boatReq3, paddleReq1, paddleReq2, paddleReq3, foundationReq1, foundationReq2, foundationReq3, wallReq1, wallReq2, wallReq3;
+    //item blueprints;
+    //item blueprints
     //item blueprints
     public ItemBlueprint Hammer;
     public ItemBlueprint Nails;
     public ItemBlueprint Boat;
     public ItemBlueprint Paddle;
+    public ItemBlueprint Foundation;
+    public ItemBlueprint Wall;
 
     //singleton pattern
     public static CraftingSystem Instance { get; set; }
@@ -70,15 +74,34 @@ public class CraftingSystem : MonoBehaviour
         Paddle.req2Amount = 3;
         Paddle.reqHammerAmount = 1;
         Paddle.numOfReqs = 3;
+        //make blueprint for Foundation
+        GameObject bpF = new GameObject("Foundation");
+        Foundation = bpP.AddComponent<ItemBlueprint>();
+        Foundation.itemName = "Paddle";
+        Foundation.req1 = "Wood (Psst Right Click!)";
+        Foundation.req2 = "Nails";
+        Foundation.reqHammer = "Hammer";
+        Foundation.req1Amount = 3;
+        Foundation.req2Amount = 3;
+        Foundation.reqHammerAmount = 1;
+        Foundation.numOfReqs = 3;
+        //make blueprint for Wall
+        GameObject bpW = new GameObject("Wall");
+        Wall = bpP.AddComponent<ItemBlueprint>();
+        Wall.itemName = "Paddle";
+        Wall.req1 = "Wood (Psst Right Click!)";
+        Wall.req2 = "Nails";
+        Wall.reqHammer = "Hammer";
+        Wall.req1Amount = 2;
+        Wall.req2Amount = 3;
+        Wall.reqHammerAmount = 1;
+        Wall.numOfReqs = 3;
     }//end of Awake
 
     // Start is called before the first frame update
     void Start(){
         isOpen = false;
 
-        //Temporarily activate tools screen to allow finding children
-        //bool wasActive = toolsScreenUI.activeSelf;
-        //toolsScreenUI.SetActive(true);
         //to open the tools screen
         toolsBTN = craftingScreenUI.transform.Find("toolsButton").GetComponent<Button>();
         toolsBTN.onClick.AddListener(delegate { OpenToolsCategory(); });
@@ -93,12 +116,8 @@ public class CraftingSystem : MonoBehaviour
         nailsReq1 = nailsTransform.Find("nailsReq1").GetComponent<TextMeshProUGUI>();
         craftNailsBTN = nailsTransform.Find("craftNailsBTN").GetComponent<Button>();
         craftNailsBTN.onClick.AddListener(delegate { CraftItem(Nails); });
-        //Return UI to its previous state (invisible again)
-        //toolsScreenUI.SetActive(wasActive);
 
-        //open boat crafting screen
-        //bool boatActive = boatScreenUI.activeSelf;
-        //boatScreenUI.SetActive(true);
+        //to open boat screen
         boatBTN = craftingScreenUI.transform.Find("boatButton").GetComponent<Button>();
         boatBTN.onClick.AddListener(delegate { OpenBoatCategory(); });
         Transform boatTransform = boatScreenUI.transform.Find("Boat");
@@ -107,16 +126,28 @@ public class CraftingSystem : MonoBehaviour
         boatReq3 = boatTransform.Find("boatReq3").GetComponent<TextMeshProUGUI>(); //the hammer
         craftBoatBTN = boatTransform.Find("craftBoatBTN").GetComponent<Button>();
         craftBoatBTN.onClick.AddListener(delegate { CraftItem(Boat); });
-        //boatScreenUI.SetActive(boatActive); //make invisible again
-
-        //Debug.Log("worked");
         Transform paddleTransform = boatScreenUI.transform.Find("Paddle");
         paddleReq1 = paddleTransform.Find("paddleReq1").GetComponent<TextMeshProUGUI>();
         paddleReq2 = paddleTransform.Find("paddleReq2").GetComponent<TextMeshProUGUI>();
         paddleReq3 = paddleTransform.Find("paddleReq3").GetComponent<TextMeshProUGUI>();
         craftPaddleBTN = paddleTransform.Find("craftPaddleBTN").GetComponent<Button>();
         craftPaddleBTN.onClick.AddListener(delegate { CraftItem(Paddle); });
-        //toolsScreenUI.SetActive(wasActive);
+
+        //to open base screen
+        baseBTN = craftingScreenUI.transform.Find("baseButton").GetComponent<Button>();
+        baseBTN.onClick.AddListener(delegate { OpenBaseCategory(); });
+        Transform foundationTransform = baseScreenUI.transform.Find("Foundation");
+        foundationReq1 = foundationTransform.Find("foundationReq1").GetComponent<TextMeshProUGUI>();
+        foundationReq2 = foundationTransform.Find("foundationReq2").GetComponent<TextMeshProUGUI>();
+        foundationReq3 = foundationTransform.Find("foundationReq3").GetComponent<TextMeshProUGUI>(); //the hammer
+        craftFoundationBTN = foundationTransform.Find("craftFoundationBTN").GetComponent<Button>();
+        craftFoundationBTN.onClick.AddListener(delegate { CraftItem(Foundation); });
+        Transform wallTransform = baseScreenUI.transform.Find("Wall");
+        wallReq1 = wallTransform.Find("wallReq1").GetComponent<TextMeshProUGUI>();
+        wallReq2 = wallTransform.Find("wallReq2").GetComponent<TextMeshProUGUI>();
+        wallReq3 = wallTransform.Find("wallReq3").GetComponent<TextMeshProUGUI>();
+        craftWallBTN = wallTransform.Find("craftWallBTN").GetComponent<Button>();
+        craftWallBTN.onClick.AddListener(delegate { CraftItem(Wall); });
 
         RefreshReqs(); //get updated reqs
     }//end of Start
@@ -159,15 +190,13 @@ public class CraftingSystem : MonoBehaviour
         RefreshReqs(); //get newest requirements
     }//end of OpenBoatCategory
 
-    /*
-    //open the paddle boat crafting page
-    private void OpenPaddleCategory(){
+    //open the base crafting page
+    private void OpenBaseCategory(){
         craftingScreenUI.SetActive(false); //close crafting screen
-        paddleScreenUI.SetActive(true);
-        //Debug.Log("opened");
+        baseScreenUI.SetActive(true);
+        Debug.Log("opened");
         RefreshReqs();
     }//end of OpenPaddleCategory
-    */
 
     private void CraftItem(ItemBlueprint craftable){
         //check that all items are there if crafting again
@@ -260,6 +289,32 @@ public class CraftingSystem : MonoBehaviour
         }//end of if
         else{
             craftPaddleBTN.gameObject.SetActive(false);
+        }//end of else
+
+        //Foundation display
+        foundationReq1.text = "Two pieces of Wood [" + woodCount + "]";
+        foundationReq2.text = "Three nails [" + nailCount + "]";
+        foundationReq3.text = "One hammer [" + hammerCount + "]";
+        if (woodCount >= Paddle.req1Amount && nailCount >= Paddle.req2Amount && hammerCount >= Boat.reqHammerAmount)
+        {
+            craftFoundationBTN.gameObject.SetActive(true);
+        }//end of if
+        else
+        {
+            craftFoundationBTN.gameObject.SetActive(false);
+        }//end of else
+
+        //Wall display
+        wallReq1.text = "Two pieces of Wood [" + woodCount + "]";
+        wallReq2.text = "Three nails [" + nailCount + "]";
+        wallReq3.text = "One hammer [" + hammerCount + "]";
+        if (woodCount >= Paddle.req1Amount && nailCount >= Paddle.req2Amount && hammerCount >= Boat.reqHammerAmount)
+        {
+            craftWallBTN.gameObject.SetActive(true);
+        }//end of if
+        else
+        {
+            craftWallBTN.gameObject.SetActive(false);
         }//end of else
     }//end of RefreshReqs
 
