@@ -55,10 +55,10 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         //go back to playing mode with locked cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        SelectionManager.Instance.EnableSelection();
-        SelectionManager.Instance.enabled = true;
-
+        
+       // SelectionManager.Instance.EnableSelection();
+        //SelectionManager.Instance.enabled = true;
+        
         //check which item was selected
         switch (gameObject.name)
         {

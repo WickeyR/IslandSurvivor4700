@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4974232039484529388}
   - component: {fileID: 5061330196315536310}
   - component: {fileID: 5973581867366959199}
-  - component: {fileID: 9030766721735341611}
   - component: {fileID: -8546250419470374069}
   m_Layer: 5
   m_Name: Foundation
@@ -103,22 +102,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ff76ff03514b4951ad993ee33adbe8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &9030766721735341611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6083155582813144860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eb3be0b3438a4658a203aa5fc1a4506, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: Foundation
-  playerInRange: 0
-  isWaterSource: 0
-  interactionHint: 
 --- !u!114 &-8546250419470374069
 MonoBehaviour:
   m_ObjectHideFlags: 0
