@@ -14,7 +14,6 @@ public class QuestMenu : MonoBehaviour
         public int required = 1;
         public Slider bar;
         public TextMeshProUGUI label;
-        [Tooltip("Optional alternate names that should count as this item (exact matches).")]
         public string[] aliases;
     }
 
@@ -24,8 +23,8 @@ public class QuestMenu : MonoBehaviour
     public KeyCode toggleKey = KeyCode.Q;
 
     [Header("Objectives")]
-    public QuestRow boat;      // Boat x1
-    public QuestRow paddles;   // Paddle x2
+    public QuestRow boat;
+    public QuestRow paddles;
 
     [Header("Update")]
     public float refreshInterval = 0.25f;
@@ -75,6 +74,11 @@ public class QuestMenu : MonoBehaviour
             _timer = 0f;
             UpdateAllRows();
         }
+
+        if (AllObjectivesComplete && Input.GetKeyDown(KeyCode.H))
+        {
+            BoatEndingController.PlayEnding();
+        }
     }
 
     void InitRow(QuestRow row)
@@ -96,8 +100,8 @@ public class QuestMenu : MonoBehaviour
         SetRow(boat, haveBoat);
         SetRow(paddles, havePaddles);
 
-        bool allDone = haveBoat   >= (boat?.required    ?? 1)
-                    && havePaddles>= (paddles?.required ?? 2);
+        bool allDone = haveBoat >= (boat?.required ?? 1)
+                    && havePaddles >= (paddles?.required ?? 2);
 
         if (headerText)
             headerText.text = allDone
