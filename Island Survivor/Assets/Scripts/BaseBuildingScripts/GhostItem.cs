@@ -26,10 +26,10 @@ public class GhostItem : MonoBehaviour
 
     private void Update(){
         if (ConstructionSystem.Instance.inConstructionMode){
-            Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), ConstructionSystem.Instance.player.GetComponent<Collider>()); //diable player collision with ghosts if in construction mode
+            Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), ConstructionSystem.Instance.player.GetComponent<Collider>()); //disable player collision with ghosts if in construction mode
         }//end of if
 
-        //We need the solid collider so the ray cast will detect it
+        //We need the solid box collider so the ray cast will detect it
         if (ConstructionSystem.Instance.inConstructionMode && isPlaced){
             solidCollider.enabled = true;
         }//end of if

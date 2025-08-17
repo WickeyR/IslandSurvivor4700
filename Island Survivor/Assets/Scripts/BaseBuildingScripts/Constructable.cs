@@ -10,6 +10,7 @@ public class Constructable : MonoBehaviour
     public bool isOverlappingItems;
     public bool isValidToBeBuilt;
     public bool detectedGhostMember;
+    public bool detectedWallGhost;
     //Materials
     private Renderer mRenderer;
     public Material redMaterial;
@@ -28,6 +29,7 @@ public class Constructable : MonoBehaviour
     }//end of Start
 
     void Update(){
+        /*
         //check if item is in the appropriate location so that it may be placed
         if (isGrounded && isOverlappingItems == false) {
             isValidToBeBuilt = true;
@@ -35,17 +37,16 @@ public class Constructable : MonoBehaviour
         else {
             isValidToBeBuilt = false;
         }//end of else
-       /*
+       */
        if (gameObject.name == "FoundationModel" || gameObject.name == "FireModel"){
             isValidToBeBuilt = isGrounded && !isOverlappingItems;
        }//end of if
        else if (gameObject.name == "WallModel"){
-            isValidToBeBuilt = detectedGhostMember;
+            isValidToBeBuilt = detectedWallGhost;
        }//end of else if
        else{
             isValidToBeBuilt = false;
        }//end of else
-       */
     }//end of Update
 
     //when the item collides with something
@@ -62,6 +63,10 @@ public class Constructable : MonoBehaviour
             detectedGhostMember = true; //item is overlapping anothe ghost item
             Debug.Log("Hit Ghost");
         }//end of if
+        if (other.gameObject.CompareTag("wallGhost") && gameObject.CompareTag("activeConstructable")){
+            detectedWallGhost = true; //item is overlapping another wall ghost item
+            Debug.Log("Hit wall ghost");
+        }//end of if
     }//end of OnTriggerEnter
 
     private void OnTriggerExit(Collider other){
@@ -73,7 +78,10 @@ public class Constructable : MonoBehaviour
         }//end of if
         if (other.gameObject.CompareTag("ghost") && gameObject.CompareTag("activeConstructable")) {
             detectedGhostMember = false; //not overlapping anything
-        }//end of if 
+        }//end of if
+        if (other.gameObject.CompareTag("wallGhost") && gameObject.CompareTag("activeConstructable")){
+            detectedWallGhost = false; //item is overlapping another wall ghost item
+        }//end of if
     }//end of OnTriggerExit
 
     //turn the item red if it cannot be placed there
