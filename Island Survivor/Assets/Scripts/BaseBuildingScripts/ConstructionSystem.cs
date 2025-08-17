@@ -190,7 +190,7 @@ public class ConstructionSystem : MonoBehaviour
                 selectedGhost = selectionTransform.gameObject;
             }//end of else if
             else if (itemToBeConstructed.name == "FireModel"){ //for fire around foundation, no ghosts fire does not go on foundation
-                itemToBeConstructed.SetActive(false);
+                itemToBeConstructed.SetActive(true);
                 selectingAGhost = false;
                 selectedGhost = null;
             }//end of if
@@ -263,9 +263,10 @@ public class ConstructionSystem : MonoBehaviour
     private void PlaceItemFreeStyle(){
         //Setting the parent to be the root of our scene
         itemToBeConstructed.transform.SetParent(transform.parent.transform.parent, true);
-
-        //Making the Ghost Children to no longer be children of this item
-        itemToBeConstructed.GetComponent<Constructable>().ExtractGhostMembers();
+        if (itemToBeConstructed.name == "FoundationModel"){
+            //Making the Ghost Children to no longer be children of this item for foundation only (has ghosts)
+            itemToBeConstructed.GetComponent<Constructable>().ExtractGhostMembers();
+        }//end of if
         //Setting the default color/material
         itemToBeConstructed.GetComponent<Constructable>().SetDefaultColor();
         itemToBeConstructed.tag = "placedFoundation";
@@ -273,10 +274,11 @@ public class ConstructionSystem : MonoBehaviour
         //Enabling back the solider collider that we disabled earlier
         itemToBeConstructed.GetComponent<Constructable>().solidCollider.enabled = true;
 
-        //Adding all the ghosts of this item into the manager's ghost bank
-        GetAllGhosts(itemToBeConstructed);
-        PerformGhostDeletionScan();
-
+        //Adding all the ghosts of this item into the manager's ghost bank, foundation only
+        if (itemToBeConstructed.name == "FoundationModel"){
+            GetAllGhosts(itemToBeConstructed);
+            PerformGhostDeletionScan();
+        }
         itemToBeConstructed = null;
 
         inConstructionMode = false;
