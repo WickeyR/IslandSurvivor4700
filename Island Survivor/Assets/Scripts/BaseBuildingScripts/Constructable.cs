@@ -19,7 +19,7 @@ public class Constructable : MonoBehaviour
     public List<GameObject> ghostList = new List<GameObject>();
     public BoxCollider solidCollider; //We need to drag this collider manualy into the inspector
 
-    private void Start() {
+    private void Start(){
         mRenderer = GetComponent<Renderer>(); //can change the different materials in run time
         mRenderer.material = defaultMaterial; //make it the default look (wood)
         foreach (Transform child in transform) { //look for ghosts and add them to the list
@@ -27,8 +27,7 @@ public class Constructable : MonoBehaviour
         }//end of foreach
     }//end of Start
 
-    void Update() {
-        /*
+    void Update(){
         //check if item is in the appropriate location so that it may be placed
         if (isGrounded && isOverlappingItems == false) {
             isValidToBeBuilt = true;
@@ -36,7 +35,7 @@ public class Constructable : MonoBehaviour
         else {
             isValidToBeBuilt = false;
         }//end of else
-        */
+       /*
        if (gameObject.name == "FoundationModel" || gameObject.name == "FireModel"){
             isValidToBeBuilt = isGrounded && !isOverlappingItems;
        }//end of if
@@ -46,10 +45,11 @@ public class Constructable : MonoBehaviour
        else{
             isValidToBeBuilt = false;
        }//end of else
+       */
     }//end of Update
 
     //when the item collides with something
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other){
         if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")) {
             isGrounded = true; //item is on the ground
             Debug.Log("Hit Ground");
@@ -64,7 +64,7 @@ public class Constructable : MonoBehaviour
         }//end of if
     }//end of OnTriggerEnter
 
-    private void OnTriggerExit(Collider other) {
+    private void OnTriggerExit(Collider other){
         if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")) {
             isGrounded = false; //not on the ground anymore
         }//end of if
@@ -77,14 +77,14 @@ public class Constructable : MonoBehaviour
     }//end of OnTriggerExit
 
     //turn the item red if it cannot be placed there
-    public void SetInvalidColor() {
-        if (mRenderer != null) {
+    public void SetInvalidColor(){
+        if (mRenderer != null){
             mRenderer.material = redMaterial;
         }//end of if
     }//end of SetInvalidColor
 
     //turn the item green if it can be placed there
-    public void SetValidColor() {
+    public void SetValidColor(){
         mRenderer.material = greenMaterial;
     }//end of SetValidColor
 

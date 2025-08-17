@@ -11,42 +11,33 @@ public class InteractableObject : MonoBehaviour
 
     private PlayerStats playerStats;
 
-    void Start()
-    {
+    void Start(){
         playerStats = FindObjectOfType<PlayerStats>();
         if (string.IsNullOrEmpty(interactionHint))
             interactionHint = isWaterSource ? "Press Right Click to Drink" : itemName;
     }
 
     //displays object name
-    public string GetItemName()
-    {
+    public string GetItemName(){
         return itemName;
     }//end of GetItemName()
 
     //pick up the item with right click into inventory
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse1) && playerInRange)
-        { //right click to add inventory
-            if (isWaterSource)
-            {
-                if (playerStats != null)
-                {
+    void Update(){
+        if (Input.GetKeyDown(KeyCode.Mouse1) && playerInRange){ //right click to add inventory
+            if (isWaterSource){
+                if (playerStats != null){
                     playerStats.DrinkFull();
                     Debug.Log("You drank water!");
                 }
             }
-            else
-            {
-                if (!InventorySystem.Instance.CheckFull() && (gameObject.CompareTag("Drops") || gameObject.CompareTag("Rock")))
-                { //check if inventory is full before adding item and if item is a drop or rock (prevent picking up wrong items)
+            else{
+                if (!InventorySystem.Instance.CheckFull() && (gameObject.CompareTag("Drops") || gameObject.CompareTag("Rock"))){ //check if inventory is full before adding item and if item is a drop or rock (prevent picking up wrong items)
                     InventorySystem.Instance.AddToInventory(itemName); //add item name to inventory
                     Debug.Log("works");
                     Destroy(gameObject); //disappear from view and is added to inventory
                 }//end of if
-                else
-                {
+                else{
                     Debug.Log("Inventory is full");
                 }//end of else
             }
@@ -54,19 +45,15 @@ public class InteractableObject : MonoBehaviour
     }//end of Update
 
     //check if player is in range of item
-    private void OnTriggerEnter(Collider other)
-    {
+    private void OnTriggerEnter(Collider other){
         //compare other and if player then text will show up
-        if (other.CompareTag("Player"))
-        {
+        if (other.CompareTag("Player")){
             playerInRange = true;
         }//end of if
     }//end of OnTriggerEnter
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
+    private void OnTriggerExit(Collider other){
+        if (other.CompareTag("Player")){
             playerInRange = false;
         }//end of if
     }//end of OnTriggerExit

@@ -169,8 +169,7 @@ public class CraftingSystem : MonoBehaviour
 
     //Update is called once per frame
     void Update(){
-        if (Input.GetKeyDown(KeyCode.C) && !isOpen)
-        { //check if C key is pressed and if the crafting system is opened
+        if (Input.GetKeyDown(KeyCode.C) && !isOpen){ //check if C key is pressed and if the crafting system is opened
             craftingScreenUI.SetActive(true); //becomes visible
             isOpen = true;
             Cursor.lockState = CursorLockMode.None; //can use mouse

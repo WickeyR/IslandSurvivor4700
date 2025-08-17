@@ -10,12 +10,9 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     //public GameObject toBeUsed;
 
     // Triggered when the mouse is clicked over the item that has this script.
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            if (isUseable)
-            {
+    public void OnPointerDown(PointerEventData eventData){
+        if (eventData.button == PointerEventData.InputButton.Right){
+            if (isUseable){
                 //toBeUsed = gameObject; //whatever item is being clicked on
                 ConstructionSystem.Instance.destroyedItem = gameObject;
                 gameObject.SetActive(false);
@@ -28,21 +25,17 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     }//end of OnPointerDown
 
     // Triggered when the mouse button is released over the item that has this script.
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            if (isUseable)
-            {
-                Destroy(gameObject);
+    public void OnPointerUp(PointerEventData eventData){
+        if (eventData.button == PointerEventData.InputButton.Right){
+            if (isUseable){
+                Destroy(gameObject); //destroy the UI image of the item we want to build with
                 InventorySystem.Instance.RecalculateList();
                 CraftingSystem.Instance.RefreshReqs();
             }//end of if
         }//end of if
     }//end of OnPointerUp
 
-    public void UseItem()
-    {
+    public void UseItem(){
         //close all screens if open so you can place item
         InventorySystem.Instance.isOpen = false;
         InventorySystem.Instance.inventoryScreenUI.SetActive(false);
@@ -60,8 +53,7 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         //SelectionManager.Instance.enabled = true;
         
         //check which item was selected
-        switch (gameObject.name)
-        {
+        switch (gameObject.name){
             case "Foundation(Clone)":
                 ConstructionSystem.Instance.ActivateConstructionPlacement("FoundationModel"); //instantiate foundation model
                 break;

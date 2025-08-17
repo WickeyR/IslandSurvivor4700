@@ -158,7 +158,7 @@ public class ConstructionSystem : MonoBehaviour
                     }//end of else
                 }//end of if
                 if (itemToBeConstructed.name == "FireModel"){
-                    //for foundation placement
+                    //for fire placement
                     if (CheckValidConstructionPosition()){
                         isValidPlacement = true;
                         itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
@@ -191,8 +191,8 @@ public class ConstructionSystem : MonoBehaviour
             }//end of else if
             else if (itemToBeConstructed.name == "FireModel"){ //for fire around foundation, no ghosts fire does not go on foundation
                 itemToBeConstructed.SetActive(false);
-                selectingAGhost = true;
-                selectedGhost = selectionTransform.gameObject;
+                selectingAGhost = false;
+                selectedGhost = null;
             }//end of if
             else{ //not pointing to anything with raycast
                 itemToBeConstructed.SetActive(true);
@@ -204,7 +204,6 @@ public class ConstructionSystem : MonoBehaviour
         // Left Mouse Click to Place item
         if(Input.GetMouseButtonDown(0) && inConstructionMode){
             //Debug.Log("Left click");
-            //ADD FOR CAMPFIRE LATER
             if(isValidPlacement && selectedGhost==null && (itemToBeConstructed.name=="FoundationModel" || itemToBeConstructed.name=="FireModel")){ //We don't want the freestyle to be triggered when we select a ghost.
                 PlaceItemFreeStyle(); //only for foundation or campfire, walls must be on foundation
                 DestroyItem(destroyedItem);
