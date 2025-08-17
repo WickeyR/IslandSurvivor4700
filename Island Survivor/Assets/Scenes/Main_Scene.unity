@@ -118835,8 +118835,8 @@ MonoBehaviour:
   ghostFullTransparentMat: {fileID: 2100000, guid: 8d14e4a50b73e4469b4782c710e5d9b3, type: 2}
   allGhostsInExistence: []
   destroyedItem: {fileID: 0}
-  constructionUI: {fileID: 0}
-  player: {fileID: 0}
+  constructionUI: {fileID: 1740378770}
+  player: {fileID: 2117944108}
 --- !u!1 &1362361684
 GameObject:
   m_ObjectHideFlags: 0
