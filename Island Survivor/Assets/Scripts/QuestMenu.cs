@@ -24,13 +24,14 @@ public class QuestMenu : MonoBehaviour
     public KeyCode toggleKey = KeyCode.Q;
 
     [Header("Objectives")]
-    public QuestRow rocks;    // 20 Rocks
-    public QuestRow bones;    // 5 Bones
-    public QuestRow secret;   // 1 Secret Item
-    public QuestRow wood;     // 40 Wood
+    public QuestRow boat;      // Boat x1
+    public QuestRow paddles;   // Paddle x2
 
     [Header("Update")]
     public float refreshInterval = 0.25f;
+
+    public bool AllObjectivesComplete { get; private set; }
+    public event Action<bool> OnObjectivesCompleteChanged;
 
     float _timer;
 
@@ -38,10 +39,8 @@ public class QuestMenu : MonoBehaviour
     {
         if (questPanel) questPanel.SetActive(false);
 
-        InitRow(rocks);
-        InitRow(bones);
-        InitRow(secret);
-        InitRow(wood);
+        InitRow(boat);
+        InitRow(paddles);
 
         UpdateAllRows();
     }
@@ -60,7 +59,6 @@ public class QuestMenu : MonoBehaviour
             }
             else
             {
-                // Only relock if other menus aren’t open
                 bool invOpen = InventorySystem.Instance != null && InventorySystem.Instance.isOpen;
                 bool craftOpen = CraftingSystem.Instance != null && CraftingSystem.Instance.isOpen;
                 if (!invOpen && !craftOpen)
@@ -92,32 +90,30 @@ public class QuestMenu : MonoBehaviour
 
     void UpdateAllRows()
     {
-        int r = CountItems(rocks);
-        int b = CountItems(bones);
-        int s = CountItems(secret);
-        int w = CountItems(wood);
+        int haveBoat    = CountItems(boat);
+        int havePaddles = CountItems(paddles);
 
-        SetRow(rocks, r);
-        SetRow(bones, b);
-        SetRow(secret, s);
-        SetRow(wood,  w);
+        SetRow(boat, haveBoat);
+        SetRow(paddles, havePaddles);
 
-        bool allDone =
-            r >= rocks.required &&
-            b >= bones.required &&
-            s >= secret.required &&
-            w >= wood.required;
+        bool allDone = haveBoat   >= (boat?.required    ?? 1)
+                    && havePaddles>= (paddles?.required ?? 2);
 
         if (headerText)
-            headerText.text = allDone ? "Boat Repair — All objectives complete!" : "Boat Repair — Objectives";
+            headerText.text = allDone
+                ? "Boat Repair — All objectives complete!"
+                : "Boat Repair — Objectives";
+
+        bool prev = AllObjectivesComplete;
+        AllObjectivesComplete = allDone;
+        if (AllObjectivesComplete != prev)
+            OnObjectivesCompleteChanged?.Invoke(AllObjectivesComplete);
     }
 
     void SetRow(QuestRow row, int have)
     {
         if (row == null) return;
-
         have = Mathf.Clamp(have, 0, row.required);
-
         if (row.bar != null) row.bar.value = have;
         if (row.label != null)
             row.label.text = $"{row.itemName}: {have}/{row.required}";
@@ -129,19 +125,12 @@ public class QuestMenu : MonoBehaviour
         var inv = InventorySystem.Instance;
         if (inv == null || inv.itemList == null) return 0;
 
-        // Exact-match names used in your project:
-        // Rock => "Rock (Psst Right Click!)"
-        // Wood => "Wood (Psst Right Click!)"
-        // Bone => "Bone"
-        // Secret => e.g., "Secret Item"
         var names = new List<string> { row.itemName };
         if (row.aliases != null && row.aliases.Length > 0) names.AddRange(row.aliases);
 
         int count = 0;
         foreach (var n in inv.itemList)
-        {
             if (names.Contains(n)) count++;
-        }
         return count;
     }
 }
