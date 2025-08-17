@@ -34,7 +34,7 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             if (isUseable)
             {
-                DestroyImmediate(gameObject);
+                Destroy(gameObject);
                 InventorySystem.Instance.RecalculateList();
                 CraftingSystem.Instance.RefreshReqs();
             }//end of if

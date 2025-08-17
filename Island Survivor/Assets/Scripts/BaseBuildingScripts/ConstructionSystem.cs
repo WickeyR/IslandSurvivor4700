@@ -83,7 +83,7 @@ public class ConstructionSystem : MonoBehaviour
         foreach (GameObject ghost in allGhostsInExistence){
             if (ghost != null){
                 if (ghost.GetComponent<GhostItem>().hasSamePosition){
-                    DestroyImmediate(ghost);
+                    Destroy(ghost);
                 }//end of if
             }//end of if
         }//end of foreach
@@ -245,7 +245,7 @@ public class ConstructionSystem : MonoBehaviour
     }//end of CheckValidConstructionPosition
 
     void DestroyItem(GameObject item){
-        DestroyImmediate(item);
+        Destroy(item);
         InventorySystem.Instance.RecalculateList();
         CraftingSystem.Instance.RefreshReqs();
     }//end of DestroyItem

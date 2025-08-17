@@ -76,8 +76,8 @@ public class CraftingSystem : MonoBehaviour
         Paddle.numOfReqs = 3;
         //make blueprint for Foundation
         GameObject bpF = new GameObject("Foundation");
-        Foundation = bpP.AddComponent<ItemBlueprint>();
-        Foundation.itemName = "Paddle";
+        Foundation = bpF.AddComponent<ItemBlueprint>();
+        Foundation.itemName = "Foundation";
         Foundation.req1 = "Wood (Psst Right Click!)";
         Foundation.req2 = "Nails";
         Foundation.reqHammer = "Hammer";
@@ -87,8 +87,8 @@ public class CraftingSystem : MonoBehaviour
         Foundation.numOfReqs = 3;
         //make blueprint for Wall
         GameObject bpW = new GameObject("Wall");
-        Wall = bpP.AddComponent<ItemBlueprint>();
-        Wall.itemName = "Paddle";
+        Wall = bpW.AddComponent<ItemBlueprint>();
+        Wall.itemName = "Wall";
         Wall.req1 = "Wood (Psst Right Click!)";
         Wall.req2 = "Nails";
         Wall.reqHammer = "Hammer";
@@ -292,10 +292,10 @@ public class CraftingSystem : MonoBehaviour
         }//end of else
 
         //Foundation display
-        foundationReq1.text = "Two pieces of Wood [" + woodCount + "]";
+        foundationReq1.text = "Three pieces of Wood [" + woodCount + "]";
         foundationReq2.text = "Three nails [" + nailCount + "]";
         foundationReq3.text = "One hammer [" + hammerCount + "]";
-        if (woodCount >= Paddle.req1Amount && nailCount >= Paddle.req2Amount && hammerCount >= Boat.reqHammerAmount)
+        if (woodCount >= Foundation.req1Amount && nailCount >= Foundation.req2Amount && hammerCount >= Foundation.reqHammerAmount)
         {
             craftFoundationBTN.gameObject.SetActive(true);
         }//end of if
@@ -308,7 +308,7 @@ public class CraftingSystem : MonoBehaviour
         wallReq1.text = "Two pieces of Wood [" + woodCount + "]";
         wallReq2.text = "Three nails [" + nailCount + "]";
         wallReq3.text = "One hammer [" + hammerCount + "]";
-        if (woodCount >= Paddle.req1Amount && nailCount >= Paddle.req2Amount && hammerCount >= Boat.reqHammerAmount)
+        if (woodCount >= Wall.req1Amount && nailCount >= Wall.req2Amount && hammerCount >= Wall.reqHammerAmount)
         {
             craftWallBTN.gameObject.SetActive(true);
         }//end of if
