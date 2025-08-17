@@ -56,7 +56,7 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         
-       // SelectionManager.Instance.EnableSelection();
+        //SelectionManager.Instance.EnableSelection();
         //SelectionManager.Instance.enabled = true;
         
         //check which item was selected
@@ -69,16 +69,18 @@ public class BuildBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 ConstructionSystem.Instance.ActivateConstructionPlacement("FoundationModel");
                 break;
             case "Wall(Clone)":
-                ConstructionSystem.Instance.ActivateConstructionPlacement("WallModel"); //instantiate foundation model
+                ConstructionSystem.Instance.ActivateConstructionPlacement("WallModel"); //instantiate wall model
                 break;
             case "Wall": //for testing
                 ConstructionSystem.Instance.ActivateConstructionPlacement("WallModel");
                 break;
             case "Fire(Clone)":
-                ConstructionSystem.Instance.ActivateConstructionPlacement("FireModel"); //instantiate foundation model
+                ConstructionSystem.Instance.ActivateConstructionPlacement("FireModel"); //instantiate camp fire model
+                Debug.Log("Fire selected");
                 break;
             case "Fire": //for testing
                 ConstructionSystem.Instance.ActivateConstructionPlacement("FireModel");
+                Debug.Log("Fire selected");
                 break;
             default:
                 break; //don't do anything

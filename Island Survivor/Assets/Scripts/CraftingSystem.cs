@@ -161,7 +161,6 @@ public class CraftingSystem : MonoBehaviour
         Transform fireTransform = baseScreenUI.transform.Find("Fire");
         fireReq1 = fireTransform.Find("fireReq1").GetComponent<TextMeshProUGUI>();
         fireReq2 = fireTransform.Find("fireReq2").GetComponent<TextMeshProUGUI>();
-        fireReq3 = fireTransform.Find("fireReq3").GetComponent<TextMeshProUGUI>();
         craftFireBTN = fireTransform.Find("craftFireBTN").GetComponent<Button>();
         craftFireBTN.onClick.AddListener(delegate { CraftItem(Fire); });
 
@@ -332,7 +331,6 @@ public class CraftingSystem : MonoBehaviour
         //Fire display
         fireReq1.text = "Three Wood [" + woodCount + "]";
         fireReq2.text = "Five nails [" + nailCount + "]";
-        fireReq3.text = "One hammer [" + hammerCount + "]";
         if(woodCount >= Fire.req1Amount && nailCount >= Fire.req2Amount){
             craftFireBTN.gameObject.SetActive(true);
         }//end of if

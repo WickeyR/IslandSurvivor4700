@@ -42,9 +42,6 @@ public class ConstructionSystem : MonoBehaviour
         //set new parent to the character's holding spot for the item
         item.transform.SetParent(constructionHoldingSpot.transform, false);
 
-        //item.transform.localPosition = Vector3.zero; //spawn at holding spot
-        //item.transform.localRotation = Quaternion.identity;
-
         itemToBeConstructed = item;
         itemToBeConstructed.gameObject.tag = "activeConstructable";
 
@@ -131,15 +128,37 @@ public class ConstructionSystem : MonoBehaviour
             constructionUI.SetActive(false);
         }//end of else
 
-        if (inConstructionMode){ //double check that itemToBeConstructed has things in it
+        if(inConstructionMode){ //double check that itemToBeConstructed has things in it
             if (itemToBeConstructed == null || itemToBeConstructed.Equals(null)){
                 Debug.LogWarning("itemToBeConstructed is not assigned or was destroyed.");
                 constructionUI.SetActive(false); // Hide UI
                 return; // Exit Update early
             }//end of if
             else{
-                if (itemToBeConstructed.name == "FoundationModel"){ //ADD FOR CAMPFIRE LATER
+                if(itemToBeConstructed.name=="FoundationModel"){ 
                   //for foundation placement
+                    if (CheckValidConstructionPosition()){
+                        isValidPlacement = true;
+                        itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
+                    }//end of if
+                    else{
+                        isValidPlacement = false;
+                        itemToBeConstructed.GetComponent<Constructable>().SetInvalidColor();
+                    }//end of else
+                }//end of if
+                if (itemToBeConstructed.name == "WallModel"){
+                    //for foundation placement
+                    if (CheckValidConstructionPosition()){
+                        isValidPlacement = true;
+                        itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
+                    }//end of if
+                    else{
+                        isValidPlacement = false;
+                        itemToBeConstructed.GetComponent<Constructable>().SetInvalidColor();
+                    }//end of else
+                }//end of if
+                if (itemToBeConstructed.name == "FireModel"){
+                    //for foundation placement
                     if (CheckValidConstructionPosition()){
                         isValidPlacement = true;
                         itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
@@ -158,19 +177,23 @@ public class ConstructionSystem : MonoBehaviour
         
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        //ADD FOR CAMPFIRE LATER
         if (Physics.Raycast(ray, out hit)){
             var selectionTransform = hit.transform;
-            if (selectionTransform.gameObject.CompareTag("ghost") && itemToBeConstructed.name == "FoundationModel"){ //for placcing on foundation ghosts
+            if(selectionTransform.gameObject.CompareTag("ghost") && itemToBeConstructed.name == "FoundationModel"){ //for placing on foundation ghosts
                 itemToBeConstructed.SetActive(false);
                 selectingAGhost = true;
                 selectedGhost = selectionTransform.gameObject;
             }//end of if
-            else if (selectionTransform.gameObject.CompareTag("wallGhost") && itemToBeConstructed.name == "WallModell"){ //for placing on wall ghosts
+            else if(selectionTransform.gameObject.CompareTag("wallGhost") && itemToBeConstructed.name == "WallModel"){ //for placing on wall ghosts
                 itemToBeConstructed.SetActive(false);
                 selectingAGhost = true;
                 selectedGhost = selectionTransform.gameObject;
             }//end of else if
+            else if (itemToBeConstructed.name == "FireModel"){ //for fire around foundation, no ghosts fire does not go on foundation
+                itemToBeConstructed.SetActive(false);
+                selectingAGhost = true;
+                selectedGhost = selectionTransform.gameObject;
+            }//end of if
             else{ //not pointing to anything with raycast
                 itemToBeConstructed.SetActive(true);
                 selectedGhost = null; //when no ghost is selected
@@ -179,14 +202,14 @@ public class ConstructionSystem : MonoBehaviour
         }//end of if
 
         // Left Mouse Click to Place item
-        if (Input.GetMouseButtonDown(0) && inConstructionMode){
+        if(Input.GetMouseButtonDown(0) && inConstructionMode){
             //Debug.Log("Left click");
             //ADD FOR CAMPFIRE LATER
-            if (isValidPlacement && selectedGhost == null && itemToBeConstructed.name == "FoundationModel"){ //We don't want the freestyle to be triggered when we select a ghost.
+            if(isValidPlacement && selectedGhost==null && (itemToBeConstructed.name=="FoundationModel" || itemToBeConstructed.name=="FireModel")){ //We don't want the freestyle to be triggered when we select a ghost.
                 PlaceItemFreeStyle(); //only for foundation or campfire, walls must be on foundation
                 DestroyItem(destroyedItem);
             }//end of if
-            if (selectingAGhost){
+            if(selectingAGhost){
                 PlaceItemInGhostPosition(selectedGhost);
                 DestroyItem(destroyedItem);
             }//end of if
@@ -261,7 +284,7 @@ public class ConstructionSystem : MonoBehaviour
     }//end of PlaceItemFreeStyle
 
     private bool CheckValidConstructionPosition(){
-        if (itemToBeConstructed != null){
+        if(itemToBeConstructed != null){
             return itemToBeConstructed.GetComponent<Constructable>().isValidToBeBuilt;
         }//end of if
         return false;

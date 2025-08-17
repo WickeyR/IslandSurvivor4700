@@ -9,7 +9,7 @@ public class Constructable : MonoBehaviour
     public bool isGrounded;
     public bool isOverlappingItems;
     public bool isValidToBeBuilt;
-    public bool detectedGhostMemeber;
+    public bool detectedGhostMember;
     //Materials
     private Renderer mRenderer;
     public Material redMaterial;
@@ -19,61 +19,72 @@ public class Constructable : MonoBehaviour
     public List<GameObject> ghostList = new List<GameObject>();
     public BoxCollider solidCollider; //We need to drag this collider manualy into the inspector
 
-    private void Start(){
+    private void Start() {
         mRenderer = GetComponent<Renderer>(); //can change the different materials in run time
         mRenderer.material = defaultMaterial; //make it the default look (wood)
-        foreach (Transform child in transform){ //look for ghosts and add them to the list
+        foreach (Transform child in transform) { //look for ghosts and add them to the list
             ghostList.Add(child.gameObject);
         }//end of foreach
     }//end of Start
 
-    void Update(){
+    void Update() {
+        /*
         //check if item is in the appropriate location so that it may be placed
-        if (isGrounded && isOverlappingItems == false){
+        if (isGrounded && isOverlappingItems == false) {
             isValidToBeBuilt = true;
         }//end of if
-        else{
+        else {
             isValidToBeBuilt = false;
         }//end of else
+        */
+       if (gameObject.name == "FoundationModel" || gameObject.name == "FireModel"){
+            isValidToBeBuilt = isGrounded && !isOverlappingItems;
+       }//end of if
+       else if (gameObject.name == "WallModel"){
+            isValidToBeBuilt = detectedGhostMember;
+       }//end of else if
+       else{
+            isValidToBeBuilt = false;
+       }//end of else
     }//end of Update
 
     //when the item collides with something
-    private void OnTriggerEnter(Collider other){
-        if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")){
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")) {
             isGrounded = true; //item is on the ground
             Debug.Log("Hit Ground");
         }//end of if
-        if (other.CompareTag("Tree") || other.CompareTag("Rock") || other.CompareTag("Drops") || other.CompareTag("Goat") && gameObject.CompareTag("activeConstructable")){
+        if (other.CompareTag("Tree") || other.CompareTag("Rock") || other.CompareTag("Drops") || other.CompareTag("Goat") && gameObject.CompareTag("activeConstructable")) {
             isOverlappingItems = true; //item is touching other items (trees, goats, drops, rocks)
             Debug.Log("Hit Tree");
         }//end of if
-        if (other.gameObject.CompareTag("ghost") && gameObject.CompareTag("activeConstructable")){
-            detectedGhostMemeber = true; //item is overlapping anothe ghost item
+        if (other.gameObject.CompareTag("ghost") && gameObject.CompareTag("activeConstructable")) {
+            detectedGhostMember = true; //item is overlapping anothe ghost item
             Debug.Log("Hit Ghost");
         }//end of if
     }//end of OnTriggerEnter
 
-    private void OnTriggerExit(Collider other){
-        if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")){
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Ground") && gameObject.CompareTag("activeConstructable")) {
             isGrounded = false; //not on the ground anymore
         }//end of if
-        if (other.CompareTag("Tree") || other.CompareTag("Rock") || other.CompareTag("Drops") || other.CompareTag("Goat") && gameObject.CompareTag("activeConstructable")){
+        if (other.CompareTag("Tree") || other.CompareTag("Rock") || other.CompareTag("Drops") || other.CompareTag("Goat") && gameObject.CompareTag("activeConstructable")) {
             isOverlappingItems = false; //not overlapping anything
         }//end of if
-        if (other.gameObject.CompareTag("ghost") && gameObject.CompareTag("activeConstructable")){
-            detectedGhostMemeber = false; //not overlapping anything
+        if (other.gameObject.CompareTag("ghost") && gameObject.CompareTag("activeConstructable")) {
+            detectedGhostMember = false; //not overlapping anything
         }//end of if 
     }//end of OnTriggerExit
 
     //turn the item red if it cannot be placed there
-    public void SetInvalidColor(){
-        if (mRenderer != null){
+    public void SetInvalidColor() {
+        if (mRenderer != null) {
             mRenderer.material = redMaterial;
         }//end of if
     }//end of SetInvalidColor
 
     //turn the item green if it can be placed there
-    public void SetValidColor(){
+    public void SetValidColor() {
         mRenderer.material = greenMaterial;
     }//end of SetValidColor
 
@@ -81,7 +92,7 @@ public class Constructable : MonoBehaviour
     public void SetDefaultColor(){
         mRenderer.material = defaultMaterial;
     }//end of SetDefaultColor
-
+    
     //set all ghost items in the same root hierachry and not as children as whatever item the player is building
     public void ExtractGhostMembers(){
         foreach (GameObject item in ghostList){

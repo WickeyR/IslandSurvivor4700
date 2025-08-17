@@ -37,7 +37,7 @@ public class GhostItem : MonoBehaviour
             solidCollider.enabled = false;
         }//end of if
         //Triggering the material
-        if (ConstructionSystem.Instance.selectedGhost == this.gameObject){ //check if the ghost is the selected ghost
+        if (ConstructionSystem.Instance.selectedGhost == gameObject){ //check if the ghost is the selected ghost
             mRenderer.material = selectedMaterial; //Green 
         }//end of if
         else{
