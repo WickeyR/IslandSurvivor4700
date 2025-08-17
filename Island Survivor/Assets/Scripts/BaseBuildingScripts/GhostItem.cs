@@ -13,8 +13,7 @@ public class GhostItem : MonoBehaviour
     // A flag for the deletion algorithm
     public bool hasSamePosition = false;
 
-    private void Start()
-    {
+    private void Start(){
         mRenderer = GetComponent<Renderer>();
         //We get them from the manager, because this way the reference always exists.
         semiTransparentMat = ConstructionSystem.Instance.ghostSemiTransparentMat;
@@ -26,29 +25,23 @@ public class GhostItem : MonoBehaviour
         solidCollider.enabled = false;
     }//end of Start
 
-    private void Update()
-    {
-        if (ConstructionSystem.Instance.inConstructionMode)
-        {
+    private void Update(){
+        if (ConstructionSystem.Instance.inConstructionMode){
             Physics.IgnoreCollision(gameObject.GetComponent<Collider>(), ConstructionSystem.Instance.player.GetComponent<Collider>()); //diable player collision with ghosts if in construction mode
         }//end of if
 
         //We need the solid collider so the ray cast will detect it
-        if (ConstructionSystem.Instance.inConstructionMode && isPlaced)
-        {
+        if (ConstructionSystem.Instance.inConstructionMode && isPlaced){
             solidCollider.enabled = true;
         }//end of if
-        if (!ConstructionSystem.Instance.inConstructionMode)
-        {
+        if (!ConstructionSystem.Instance.inConstructionMode){
             solidCollider.enabled = false;
         }//end of if
         //Triggering the material
-        if (ConstructionSystem.Instance.selectedGhost == this.gameObject)
-        { //check if the ghost is the selected ghost
+        if (ConstructionSystem.Instance.selectedGhost == this.gameObject){ //check if the ghost is the selected ghost
             mRenderer.material = selectedMaterial; //Green 
         }//end of if
-        else
-        {
+        else{
             mRenderer.material = semiTransparentMat; //change to semi transparent if in debug else full
         }//end of else
     }//end of Update

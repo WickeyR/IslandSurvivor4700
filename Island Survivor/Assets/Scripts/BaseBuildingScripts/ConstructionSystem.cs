@@ -22,23 +22,19 @@ public class ConstructionSystem : MonoBehaviour
     public List<GameObject> allGhostsInExistence = new List<GameObject>();
     public GameObject destroyedItem;
     public GameObject constructionUI; //displays instructions when in construction mode
-    public GameObject player; //prevent player from colliding with ghosts by diabling the collider
+    public GameObject player; //prevent player from colliding with ghosts by disabling the collider
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
+    private void Awake(){
+        if (Instance != null && Instance != this){
             Destroy(gameObject);
         }//end of if
-        else
-        {
+        else{
             Instance = this;
         }//end of else
     }//end of Awake
 
     //right click on item
-    public void ActivateConstructionPlacement(string itemToConstruct)
-    {
+    public void ActivateConstructionPlacement(string itemToConstruct){
         GameObject item = Instantiate(Resources.Load<GameObject>(itemToConstruct)); //instantiate item to be constructed in 3D
 
         //replace the name of the gameobject so it will not be a clone
@@ -55,34 +51,25 @@ public class ConstructionSystem : MonoBehaviour
         inConstructionMode = true;
     }//end of ActivateConstructionPlacement
 
-    private void GetAllGhosts(GameObject itemToBeConstructed)
-    {
+    private void GetAllGhosts(GameObject itemToBeConstructed){
         List<GameObject> ghostlist = itemToBeConstructed.gameObject.GetComponent<Constructable>().ghostList;
 
-        foreach (GameObject ghost in ghostlist)
-        {
+        foreach (GameObject ghost in ghostlist){
             Debug.Log(ghost);
             allGhostsInExistence.Add(ghost);
         }//end of foreach
     }//end of GetAllGhosts
 
-    private void PerformGhostDeletionScan()
-    {
-        foreach (GameObject ghost in allGhostsInExistence)
-        {
-            if (ghost != null)
-            {
-                if (ghost.GetComponent<GhostItem>().hasSamePosition == false) //if we did not already add a flag{
-                    foreach (GameObject ghostX in allGhostsInExistence)
-                    {
+    private void PerformGhostDeletionScan(){
+        foreach (GameObject ghost in allGhostsInExistence){
+            if (ghost != null){
+                if (ghost.GetComponent<GhostItem>().hasSamePosition == false){ //if we did not already add a flag
+                    foreach (GameObject ghostX in allGhostsInExistence){
                         //First we check that it is not the same object
-                        if (ghost.gameObject != ghostX.gameObject)
-                        {
+                        if (ghost.gameObject != ghostX.gameObject){
                             //If its not the same object but they have the same position
-                            if (XPositionToAccurateFloat(ghost) == XPositionToAccurateFloat(ghostX) && ZPositionToAccurateFloat(ghost) == ZPositionToAccurateFloat(ghostX))
-                            {
-                                if (ghost != null && ghostX != null)
-                                {
+                            if (XPositionToAccurateFloat(ghost) == XPositionToAccurateFloat(ghostX) && ZPositionToAccurateFloat(ghost) == ZPositionToAccurateFloat(ghostX)){
+                                if (ghost != null && ghostX != null){
                                     // setting the flag
                                     ghostX.GetComponent<GhostItem>().hasSamePosition = true;
                                     break;
@@ -90,24 +77,20 @@ public class ConstructionSystem : MonoBehaviour
                             }//end of if
                         }//end of if
                     }//end of foreach
+                }//end of if
             }//end of if
         }//end of foreach
-        foreach (GameObject ghost in allGhostsInExistence)
-        {
-            if (ghost != null)
-            {
-                if (ghost.GetComponent<GhostItem>().hasSamePosition)
-                {
+        foreach (GameObject ghost in allGhostsInExistence){
+            if (ghost != null){
+                if (ghost.GetComponent<GhostItem>().hasSamePosition){
                     DestroyImmediate(ghost);
                 }//end of if
             }//end of if
         }//end of foreach
     }//end of PerformGhostDeletionScan
 
-    private float XPositionToAccurateFloat(GameObject ghost)
-    {
-        if (ghost != null)
-        {
+    private float XPositionToAccurateFloat(GameObject ghost){
+        if (ghost != null){
             //Turning the position to a 2 decimal rounded float
             Vector3 targetPosition = ghost.gameObject.transform.position;
             float pos = targetPosition.x;
@@ -117,10 +100,8 @@ public class ConstructionSystem : MonoBehaviour
         return 0;
     }//end of XPositionToAccurateFloat
 
-    private float ZPositionToAccurateFloat(GameObject ghost)
-    {
-        if (ghost != null)
-        {
+    private float ZPositionToAccurateFloat(GameObject ghost){
+        if (ghost != null){
             //Turning the position to a 2 decimal rounded float
             Vector3 targetPosition = ghost.gameObject.transform.position;
             float pos = targetPosition.z;
@@ -130,30 +111,23 @@ public class ConstructionSystem : MonoBehaviour
         return 0;
     }//end of ZPositionToAccurateFloat
 
-    private void Update()
-    {
+    private void Update(){
         //display instructions when in construction mode
-        if (inConstructionMode)
-        {
+        if (inConstructionMode){
             constructionUI.SetActive(true);
         }//end of if
-        else
-        {
+        else{
             constructionUI.SetActive(false);
         }//end of else
 
-        if (itemToBeConstructed != null && inConstructionMode)
-        {
-            if (itemToBeConstructed.name == "FoundationModel")
-            { //ADD FOR CAMPFIRE LATER
+        if (itemToBeConstructed != null && inConstructionMode){
+            if (itemToBeConstructed.name == "FoundationModel"){ //ADD FOR CAMPFIRE LATER
                 //for foundation placement
-                if (CheckValidConstructionPosition())
-                {
+                if (CheckValidConstructionPosition()){
                     isValidPlacement = true;
                     itemToBeConstructed.GetComponent<Constructable>().SetValidColor();
                 }//end of if
-                else
-                {
+                else{
                     isValidPlacement = false;
                     itemToBeConstructed.GetComponent<Constructable>().SetInvalidColor();
                 }//end of else
@@ -163,23 +137,19 @@ public class ConstructionSystem : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         //ADD FOR CAMPFIRE LATER
-        if (Physics.Raycast(ray, out hit))
-        {
+        if (Physics.Raycast(ray, out hit)){
             var selectionTransform = hit.transform;
-            if (selectionTransform.gameObject.CompareTag("ghost") && itemToBeConstructed.name == "FoundationModel")
-            { //for placcing on foundation ghosts
+            if (selectionTransform.gameObject.CompareTag("ghost") && itemToBeConstructed.name == "FoundationModel"){ //for placcing on foundation ghosts
                 itemToBeConstructed.SetActive(false);
                 selectingAGhost = true;
                 selectedGhost = selectionTransform.gameObject;
             }//end of if
-            else if (selectionTransform.gameObject.CompareTag("wallGhost") && itemToBeConstructed.name == "WallModell")
-            { //for placing on wall ghosts
+            else if (selectionTransform.gameObject.CompareTag("wallGhost") && itemToBeConstructed.name == "WallModell"){ //for placing on wall ghosts
                 itemToBeConstructed.SetActive(false);
                 selectingAGhost = true;
                 selectedGhost = selectionTransform.gameObject;
             }//end of else if
-            else
-            { //not pointing to anything with raycast
+            else{ //not pointing to anything with raycast
                 itemToBeConstructed.SetActive(true);
                 selectedGhost = null; //when no ghost is selected
                 selectingAGhost = false;
@@ -187,23 +157,19 @@ public class ConstructionSystem : MonoBehaviour
         }//end of if
 
         // Left Mouse Click to Place item
-        if (Input.GetMouseButtonDown(0) && inConstructionMode)
-        {
+        if (Input.GetMouseButtonDown(0) && inConstructionMode){
             //ADD FOR CAMPFIRE LATER
-            if (isValidPlacement && selectedGhost == false && itemToBeConstructed.name == "FoundationModel")
-            { //We don't want the freestyle to be triggered when we select a ghost.
+            if (isValidPlacement && selectedGhost == null && itemToBeConstructed.name == "FoundationModel"){ //We don't want the freestyle to be triggered when we select a ghost.
                 PlaceItemFreeStyle(); //only for foundation or campfire, walls must be on foundation
                 DestroyItem(destroyedItem);
             }//end of if
-            if (selectingAGhost)
-            {
+            if (selectingAGhost){
                 PlaceItemInGhostPosition(selectedGhost);
                 DestroyItem(destroyedItem);
             }//end of if
         }//end of if
         //Press 'X' to Cancel                      //TODO - don't destroy the ui item until you actually placed it.
-        if (Input.GetKeyDown(KeyCode.X) && isValidPlacement)
-        {     //Left Mouse Button
+        if (Input.GetKeyDown(KeyCode.X) && isValidPlacement){     //Left Mouse Button
             destroyedItem.SetActive(true);
             destroyedItem = null;
             DestroyItem(itemToBeConstructed);
@@ -212,8 +178,7 @@ public class ConstructionSystem : MonoBehaviour
         }//end of if
     }//end of Update
 
-    private void PlaceItemInGhostPosition(GameObject copyOfGhost)
-    {
+    private void PlaceItemInGhostPosition(GameObject copyOfGhost){
         Vector3 ghostPosition = copyOfGhost.transform.position;
         Quaternion ghostRotation = copyOfGhost.transform.rotation;
 
@@ -232,8 +197,7 @@ public class ConstructionSystem : MonoBehaviour
         itemToBeConstructed.GetComponent<Constructable>().solidCollider.enabled = true; //Enabling back the solider collider that we disabled earlier
         itemToBeConstructed.GetComponent<Constructable>().SetDefaultColor(); //set the default color (material)
 
-        if (itemToBeConstructed.name == "FoundationModel")
-        { //for Foundation only, wall has no ghosts (placed on foundation), campfire can be placed anywhere 
+        if (itemToBeConstructed.name == "FoundationModel"){ //for Foundation only, wall has no ghosts (placed on foundation), campfire can be placed anywhere 
             //Making the Ghost Children to no longer be children of this item
             itemToBeConstructed.GetComponent<Constructable>().ExtractGhostMembers();
             itemToBeConstructed.tag = "placedFoundation";
@@ -241,8 +205,7 @@ public class ConstructionSystem : MonoBehaviour
             GetAllGhosts(itemToBeConstructed);
             PerformGhostDeletionScan();
         }//end of if
-        else
-        { //for any other object
+        else{ //for any other object
             itemToBeConstructed.tag = "placedWall";
             DestroyItem(selectedGhost); //destroy the ghost because no more walls can be placed there
         }//end of else
@@ -252,8 +215,7 @@ public class ConstructionSystem : MonoBehaviour
     }//end of PlaceItemInGhostPosition
 
 
-    private void PlaceItemFreeStyle()
-    {
+    private void PlaceItemFreeStyle(){
         //Setting the parent to be the root of our scene
         itemToBeConstructed.transform.SetParent(transform.parent.transform.parent, true);
 
@@ -275,17 +237,14 @@ public class ConstructionSystem : MonoBehaviour
         inConstructionMode = false;
     }//end of PlaceItemFreeStyle
 
-    private bool CheckValidConstructionPosition()
-    {
-        if (itemToBeConstructed != null)
-        {
+    private bool CheckValidConstructionPosition(){
+        if (itemToBeConstructed != null){
             return itemToBeConstructed.GetComponent<Constructable>().isValidToBeBuilt;
         }//end of if
         return false;
     }//end of CheckValidConstructionPosition
 
-    void DestroyItem(GameObject item)
-    {
+    void DestroyItem(GameObject item){
         DestroyImmediate(item);
         InventorySystem.Instance.RecalculateList();
         CraftingSystem.Instance.RefreshReqs();
