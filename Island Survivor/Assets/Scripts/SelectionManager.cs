@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class SelectionManager : MonoBehaviour
     public GameObject selectedObject; //the object the cursor is pointing to
     public float choppingDistance = 3f; //player must be in this range to chop a tree down
     public float goatDistance = 3f; //player must be very close to the goat to hit it
+    public Image centerDotImage;
 
     private void Start(){
         onTarget = false;
@@ -20,6 +22,10 @@ public class SelectionManager : MonoBehaviour
     }//end of start
 
     void Update(){
+        if (EventSystem.current.IsPointerOverGameObject()){
+            return;
+        }//end of if
+
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //casts a ray from the center of the screen
         RaycastHit hit;
 
@@ -67,4 +73,14 @@ public class SelectionManager : MonoBehaviour
         }//end of if
         */
     }//end of Update
+
+    public void DisableSelection(){
+        centerDotImage.enabled = false;
+        selectedObject = null;
+    }//end of DisableSelection
+
+    public void EnableSelection(){
+        centerDotImage.enabled = true;
+    }//end of EnableSelection
 }//end of SelectionManager
+

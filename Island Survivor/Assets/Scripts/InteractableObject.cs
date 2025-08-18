@@ -11,8 +11,7 @@ public class InteractableObject : MonoBehaviour
 
     private PlayerStats playerStats;
 
-    void Start()
-    {
+    void Start(){
         playerStats = FindObjectOfType<PlayerStats>();
         if (string.IsNullOrEmpty(interactionHint))
             interactionHint = isWaterSource ? "Press Right Click to Drink" : itemName;
@@ -25,18 +24,15 @@ public class InteractableObject : MonoBehaviour
 
     //pick up the item with right click into inventory
     void Update(){
-         if(Input.GetKeyDown(KeyCode.Mouse1) && playerInRange /*&& SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject==gameObject*/){ //right click to add inventory
-            if (isWaterSource)
-            {
-                if (playerStats != null)
-                {
+        if (Input.GetKeyDown(KeyCode.Mouse1) && playerInRange){ //right click to add inventory
+            if (isWaterSource){
+                if (playerStats != null){
                     playerStats.DrinkFull();
                     Debug.Log("You drank water!");
                 }
             }
-            else
-            {
-                if (!InventorySystem.Instance.CheckFull()){ //check if inventory is full before adding item
+            else{
+                if (!InventorySystem.Instance.CheckFull() && (gameObject.CompareTag("Drops") || gameObject.CompareTag("Rock"))){ //check if inventory is full before adding item and if item is a drop or rock (prevent picking up wrong items)
                     InventorySystem.Instance.AddToInventory(itemName); //add item name to inventory
                     Debug.Log("works");
                     Destroy(gameObject); //disappear from view and is added to inventory
@@ -45,7 +41,7 @@ public class InteractableObject : MonoBehaviour
                     Debug.Log("Inventory is full");
                 }//end of else
             }
-         }//end of if
+        }//end of if
     }//end of Update
 
     //check if player is in range of item
@@ -62,3 +58,5 @@ public class InteractableObject : MonoBehaviour
         }//end of if
     }//end of OnTriggerExit
 }//end of InteractableObject
+
+
